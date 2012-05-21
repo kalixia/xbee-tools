@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>com.kalixia.xbee</groupId>
+    <artifactId>xbee-tools</artifactId>
+    <version>0.1</version>
+    <name>XBee/ZigBee Tools</name>
+    <description>XBee/ZigBee Java API and tools based on Netty.</description>
+    <url>https://github.com/kalixia/xbee-tools</url>
+
+    <licenses>
+        <license>
+            <name>Apache License, Version 2.0</name>
+            <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+        </license>
+    </licenses>
+
+    <scm>
+        <connection>scm:git:git://github.com/kalixia/xbee-tools.git</connection>
+        <developerConnection>scm:git:git@github.com:kalixia/xbee-tools.git</developerConnection>
+        <url>https://github.com/kalixia/xbee-tools</url>
+    </scm>
+
+    <issueManagement>
+        <system>GitHub</system>
+        <url>https://github.com/kalixia/xbee-tools/issues</url>
+    </issueManagement>
+
+    <developers>
+        <developer>
+            <id>jeje</id>
+            <name>Jerome Bernard</name>
+            <email>jerome.bernard@gmail.com</email>
+            <timezone>Europe/Paris</timezone>
+            <organization>Kalixia, SARL.</organization>
+        </developer>
+    </developers>
+    
+    <dependencies>
+        <dependency>
+            <groupId>io.netty</groupId>
+            <artifactId>netty</artifactId>
+            <version>3.4.5.Final</version>
+        </dependency>
+    </dependencies>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-site-plugin</artifactId>
+                <version>3.0</version>
+                <configuration>
+                    <reportPlugins>
+                        <reportPlugin>
+                            <groupId>org.apache.maven.plugins</groupId>
+                            <artifactId>maven-project-info-reports-plugin</artifactId>
+                            <version>2.4</version>
+                        </reportPlugin>
+                        <reportPlugin>
+                            <groupId>org.apache.maven.plugins</groupId>
+                            <artifactId>maven-pmd-plugin</artifactId>
+                            <version>2.7.1</version>
+                        </reportPlugin>
+                        <reportPlugin>
+                            <groupId>org.codehaus.mojo</groupId>
+                            <artifactId>findbugs-maven-plugin</artifactId>
+                            <version>2.4.0</version>
+                        </reportPlugin>
+                    </reportPlugins>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+    
+</project>

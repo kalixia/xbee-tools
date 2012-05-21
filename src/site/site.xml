@@ -1,0 +1,28 @@
+<project name="XBee/ZigBee Tools">
+    <skin>
+        <groupId>org.apache.maven.skins</groupId>
+        <artifactId>maven-fluido-skin</artifactId>
+        <version>1.2.1</version>
+    </skin>
+
+    <custom>
+        <fluidoSkin>
+            <topBarEnabled>true</topBarEnabled>
+            <sideBarEnabled>true</sideBarEnabled>
+            <searchEnabled>true</searchEnabled>
+            <sourceLineNumbersEnabled>true</sourceLineNumbersEnabled>
+            <gitHub>
+                <projectId>kalixia/xbee-tools</projectId>
+                <ribbonOrientation>right</ribbonOrientation>
+                <!--<ribbonColor>black</ribbonColor>-->
+            </gitHub>
+            <!--<googleSearch>-->
+                <!--<sitesearch/>-->
+            <!--</googleSearch>-->
+        </fluidoSkin>
+    </custom>
+
+    <body>
+        <menu ref="reports"/>
+    </body>
+</project>
