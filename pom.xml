@@ -40,10 +40,31 @@
     </developers>
     
     <dependencies>
+        <!--<dependency>-->
+            <!--<groupId>io.netty</groupId>-->
+            <!--<artifactId>netty</artifactId>-->
+            <!--<version>3.4.5.Final</version>-->
+        <!--</dependency>-->
         <dependency>
             <groupId>io.netty</groupId>
-            <artifactId>netty</artifactId>
-            <version>3.4.5.Final</version>
+            <artifactId>netty-handler</artifactId>
+            <version>${netty.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>io.netty</groupId>
+            <artifactId>netty-codec</artifactId>
+            <version>${netty.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>io.netty</groupId>
+            <artifactId>netty-transport-rxtx</artifactId>
+            <version>${netty.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>ch.qos.logback</groupId>
+            <artifactId>logback-classic</artifactId>
+            <version>1.0.1</version>
         </dependency>
     </dependencies>
 
@@ -55,25 +76,32 @@
                 <version>3.0</version>
                 <configuration>
                     <reportPlugins>
-                        <reportPlugin>
+                        <plugin>
                             <groupId>org.apache.maven.plugins</groupId>
                             <artifactId>maven-project-info-reports-plugin</artifactId>
                             <version>2.4</version>
-                        </reportPlugin>
-                        <reportPlugin>
+                        </plugin>
+                        <plugin>
                             <groupId>org.apache.maven.plugins</groupId>
                             <artifactId>maven-pmd-plugin</artifactId>
                             <version>2.7.1</version>
-                        </reportPlugin>
-                        <reportPlugin>
+                        </plugin>
+                        <plugin>
                             <groupId>org.codehaus.mojo</groupId>
                             <artifactId>findbugs-maven-plugin</artifactId>
                             <version>2.4.0</version>
-                        </reportPlugin>
+                            <configuration>
+                                <xmlOutput>true</xmlOutput>
+                            </configuration>
+                        </plugin>
                     </reportPlugins>
                 </configuration>
             </plugin>
         </plugins>
     </build>
+
+    <properties>
+        <netty.version>4.0.0.Alpha1-SNAPSHOT</netty.version>
+    </properties>
     
 </project>
