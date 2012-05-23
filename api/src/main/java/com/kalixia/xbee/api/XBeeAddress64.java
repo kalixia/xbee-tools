@@ -11,4 +11,8 @@ public class XBeeAddress64 implements XBeeAddress {
     public String toString() {
         return "0x" + Long.toHexString(address);
     }
+
+    public int getLength() {
+        return 8;
+    }
 }

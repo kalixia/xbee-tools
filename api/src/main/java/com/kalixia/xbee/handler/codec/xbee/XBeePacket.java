@@ -8,6 +8,13 @@ class XBeePacket {
     private final ChannelBuffer data;
     private final byte checksum;
 
+    public XBeePacket(XBeeApiIdentifier apiIdentifier, int length, ChannelBuffer data) {
+        this.apiIdentifier = apiIdentifier;
+        this.length = length;
+        this.data = data;
+        this.checksum = calculateChecksum();
+    }
+
     public XBeePacket(XBeeApiIdentifier apiIdentifier, int length, ChannelBuffer data, byte checksum) {
         this.apiIdentifier = apiIdentifier;
         this.length = length;
@@ -31,11 +38,21 @@ class XBeePacket {
         return checksum;
     }
 
+    public byte calculateChecksum() {
+        byte computed = apiIdentifier.getApiIdentifier();
+        data.markReaderIndex();
+        for (int i = 0; i < length - 1; i++) {
+            computed += data.readByte();
+        }
+        data.resetReaderIndex();
+        return (byte) (0xFF - computed);
+    }
+
     /**
      * Validate checksum of the data of the packet
      * @return true if the checksum is a match with the data
      */
-    public boolean validateChecksum() {
+    public boolean verifyChecksum() {
         byte computed = apiIdentifier.getApiIdentifier();
         data.markReaderIndex();
         for (int i = 0; i < length - 1; i++) {

@@ -3,6 +3,7 @@ package com.kalixia.xbee.handler.codec.xbee;
 import com.kalixia.xbee.api.RSSI;
 import com.kalixia.xbee.api.XBeeAddress16;
 import com.kalixia.xbee.api.XBeeAddress64;
+import com.kalixia.xbee.api.XBeeModemStatus;
 import com.kalixia.xbee.api.XBeeReceive;
 import com.kalixia.xbee.api.XBeeReceive16;
 import com.kalixia.xbee.api.XBeeReceive64;
@@ -15,8 +16,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * Decoder which create the appropriate API object.
+ * Decoder which creates the appropriate API object.
  * Expect the input to be a {@link XBeePacket}, hence is usually preceded with the {@link XBeeFrameDelimiterDecoder}.
+ *
+ * This decoder only work with AP = 1 yet.
  */
 public class XBeePacketDecoder extends OneToOneDecoder {
     private static final Logger LOGGER = LoggerFactory.getLogger(XBeePacketDecoder.class);
@@ -27,6 +30,10 @@ public class XBeePacketDecoder extends OneToOneDecoder {
         ChannelBuffer data = ((XBeePacket) msg).getData();
 
         switch (packet.getApiIdentifier()) {
+            case MODEM_STATUS: {
+                byte status = data.readByte();
+                return XBeeModemStatus.valueOf(status);
+            }
             case RX_PACKET_16: {
                 XBeeAddress16 source = new XBeeAddress16(data.readShort());
                 RSSI rssi = new RSSI(data.readByte());
@@ -49,7 +56,8 @@ public class XBeePacketDecoder extends OneToOneDecoder {
                 return new XBeeTransmitStatus(frameID, status);
             }
             default:
-                throw new IllegalStateException("Invalid API identifier " + packet.getApiIdentifier());
+                LOGGER.error("Unknown API identifier " + packet.getApiIdentifier());
+                return null;
         }
     }
 }

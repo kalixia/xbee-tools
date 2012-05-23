@@ -7,7 +7,6 @@ import io.netty.channel.ChannelHandlerContext;
 import io.netty.handler.codec.frame.FrameDecoder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import java.nio.charset.Charset;
 
 /**
  * Decoder which analyzes serial data input and generate appropriate frames as {@link XBeePacket}s.
@@ -68,7 +67,7 @@ public class XBeeFrameDelimiterDecoder extends FrameDecoder {
 //            LOGGER.debug("Frame content is: {}", frame.toString(Charset.defaultCharset()));
         }
 
-        if (!packet.validateChecksum())
+        if (!packet.verifyChecksum())
             throw new IllegalStateException("Invalid checksum for message");
 
 

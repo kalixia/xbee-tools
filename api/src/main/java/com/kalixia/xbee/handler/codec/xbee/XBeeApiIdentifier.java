@@ -1,6 +1,8 @@
 package com.kalixia.xbee.handler.codec.xbee;
 
 enum XBeeApiIdentifier {
+    MODEM_STATUS(0x8A, "Modem Status"),
+    TX_PACKET_64(0x00, "TX (Transmit) Request: 64-bit address"),
     TX_PACKET_16(0x01, "TX (Transmit) Request: 16-bit address"),
     TX_STATUS(0x89, "TX (Transmit) Status"),
     RX_PACKET_64(0x80, "RX (Receive) Packet: 64-bit Address"),
@@ -27,7 +29,7 @@ enum XBeeApiIdentifier {
             if (id.getApiIdentifier() == identifier)
                 return id;
         }
-        throw new IllegalArgumentException("Unknow API identifier " + identifier);
+        throw new IllegalArgumentException("Unknown API identifier " + identifier);
     }
 
 }

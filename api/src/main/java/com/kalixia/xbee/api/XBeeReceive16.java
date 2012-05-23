@@ -35,8 +35,6 @@ public class XBeeReceive16 implements XBeeReceive {
                 "source=" + source +
                 ", rssi=" + rssi +
                 ", options=" + options +
-                ", data=" + new String(data) +
-//                ", data=" + Arrays.toString(data) +
                 '}';
     }
 }

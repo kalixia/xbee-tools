@@ -11,4 +11,8 @@ public class XBeeAddress16 implements XBeeAddress {
     public String toString() {
         return "0x" + Integer.toHexString(address);
     }
+
+    public int getLength() {
+        return 2;
+    }
 }
