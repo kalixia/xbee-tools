@@ -2,10 +2,11 @@ package com.kalixia.xbee.api;
 
 import java.util.BitSet;
 
-public interface XBeeRequest {
+public interface XBeeReceive {
     XBeeAddress getSource();
     RSSI getRssi();
     Options getOptions();
+    byte[] getData();
 
     /**
      * bit 0 [reserved]

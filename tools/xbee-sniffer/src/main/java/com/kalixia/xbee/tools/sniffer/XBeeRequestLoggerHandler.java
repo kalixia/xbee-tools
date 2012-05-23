@@ -1,6 +1,6 @@
-package com.kalixia.xbee.tools;
+package com.kalixia.xbee.tools.sniffer;
 
-import com.kalixia.xbee.api.XBeeRequest;
+import com.kalixia.xbee.api.XBeeReceive;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.MessageEvent;
 import io.netty.channel.SimpleChannelHandler;
@@ -12,8 +12,8 @@ public class XBeeRequestLoggerHandler extends SimpleChannelHandler {
     
     @Override
     public void messageReceived(ChannelHandlerContext ctx, MessageEvent e) throws Exception {
-        XBeeRequest request = (XBeeRequest) e;
-        LOGGER.info("Received XBee request {}", e);
+        XBeeReceive receive = (XBeeReceive) e;
+        LOGGER.info("Received XBee receive {}", receive.getData());
 
         super.messageReceived(ctx, e);
     }

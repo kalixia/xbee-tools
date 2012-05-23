@@ -33,7 +33,7 @@ public class XBeeFrameDelimiterDecoder extends FrameDecoder {
         }
 
         // read the packet length
-        int length = buf.readByte() * 256 + buf.readByte();
+        short length = buf.readShort();
 
         // Make sure if there's enough bytes in the buffer.
         if (buf.readableBytes() < length + 1) {     // data to read + 1 byte for the checksum

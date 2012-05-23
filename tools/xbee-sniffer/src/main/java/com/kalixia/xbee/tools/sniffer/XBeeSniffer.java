@@ -1,4 +1,4 @@
-package com.kalixia.xbee.tools;
+package com.kalixia.xbee.tools.sniffer;
 
 import com.beust.jcommander.JCommander;
 import com.beust.jcommander.Parameter;
@@ -12,8 +12,6 @@ import io.netty.channel.ChannelPipelineFactory;
 import io.netty.channel.Channels;
 import io.netty.channel.rxtx.RxtxChannelFactory;
 import io.netty.channel.rxtx.RxtxDeviceAddress;
-import io.netty.handler.codec.string.StringDecoder;
-import io.netty.handler.logging.LoggingHandler;
 import io.netty.logging.InternalLoggerFactory;
 import io.netty.logging.Slf4JLoggerFactory;
 import org.slf4j.Logger;

@@ -1,6 +1,8 @@
 package com.kalixia.xbee.handler.codec.xbee;
 
 enum XBeeApiIdentifier {
+    TX_PACKET_16(0x01, "TX (Transmit) Request: 16-bit address"),
+    TX_STATUS(0x89, "TX (Transmit) Status"),
     RX_PACKET_64(0x80, "RX (Receive) Packet: 64-bit Address"),
     RX_PACKET_16(0x81, "RX (Receive) Packet: 16-bit Address");
 

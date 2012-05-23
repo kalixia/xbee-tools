@@ -2,9 +2,11 @@ package com.kalixia.xbee.handler.codec.xbee;
 
 import com.kalixia.xbee.api.RSSI;
 import com.kalixia.xbee.api.XBeeAddress16;
-import com.kalixia.xbee.api.XBeeRequest;
-import com.kalixia.xbee.api.XBeeRequest16;
-import com.kalixia.xbee.api.XBeeRequest64;
+import com.kalixia.xbee.api.XBeeAddress64;
+import com.kalixia.xbee.api.XBeeReceive;
+import com.kalixia.xbee.api.XBeeReceive16;
+import com.kalixia.xbee.api.XBeeReceive64;
+import com.kalixia.xbee.api.XBeeTransmitStatus;
 import io.netty.buffer.ChannelBuffer;
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelHandlerContext;
@@ -25,15 +27,27 @@ public class XBeePacketDecoder extends OneToOneDecoder {
         ChannelBuffer data = ((XBeePacket) msg).getData();
 
         switch (packet.getApiIdentifier()) {
-            case RX_PACKET_16:
-                XBeeAddress16 source = new XBeeAddress16(data.readByte() * 256 + data.readByte());
+            case RX_PACKET_16: {
+                XBeeAddress16 source = new XBeeAddress16(data.readShort());
                 RSSI rssi = new RSSI(data.readByte());
-                XBeeRequest.Options options = new XBeeRequest.Options(data.readByte());
+                XBeeReceive.Options options = new XBeeReceive.Options(data.readByte());
                 byte appData[] = new byte[data.readableBytes()];
                 data.readBytes(appData);
-                return new XBeeRequest16(source, rssi, options, appData);
-            case RX_PACKET_64:
-                return new XBeeRequest64();
+                return new XBeeReceive16(source, rssi, options, appData);
+            }
+            case RX_PACKET_64: {
+                XBeeAddress64 source = new XBeeAddress64(data.readLong());
+                RSSI rssi = new RSSI(data.readByte());
+                XBeeReceive.Options options = new XBeeReceive.Options(data.readByte());
+                byte appData[] = new byte[data.readableBytes()];
+                data.readBytes(appData);
+                return new XBeeReceive64(source, rssi, options, appData);
+            }
+            case TX_STATUS: {
+                byte frameID = data.readByte();
+                byte status = data.readByte();
+                return new XBeeTransmitStatus(frameID, status);
+            }
             default:
                 throw new IllegalStateException("Invalid API identifier " + packet.getApiIdentifier());
         }

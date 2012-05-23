@@ -1,7 +1,5 @@
 package com.kalixia.xbee.api;
 
-import com.kalixia.xbee.utils.HexUtils;
-
 public class XBeeAddress16 implements XBeeAddress {
     private final int address;
 

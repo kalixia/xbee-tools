@@ -3,10 +3,10 @@
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
-
     <groupId>com.kalixia.xbee</groupId>
-    <artifactId>xbee-tools</artifactId>
+    <artifactId>xbee-tools-parent</artifactId>
     <version>0.1</version>
+    <packaging>pom</packaging>
     <name>XBee/ZigBee Tools</name>
     <description>XBee/ZigBee Java API and tools based on Netty.</description>
     <url>https://github.com/kalixia/xbee-tools</url>
@@ -39,64 +39,14 @@
         </developer>
     </developers>
     
-    <dependencies>
-        <!--<dependency>-->
-            <!--<groupId>io.netty</groupId>-->
-            <!--<artifactId>netty</artifactId>-->
-            <!--<version>3.4.5.Final</version>-->
-        <!--</dependency>-->
-        <dependency>
-            <groupId>io.netty</groupId>
-            <artifactId>netty-handler</artifactId>
-            <version>${netty.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>io.netty</groupId>
-            <artifactId>netty-codec</artifactId>
-            <version>${netty.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>io.netty</groupId>
-            <artifactId>netty-transport-rxtx</artifactId>
-            <version>${netty.version}</version>
-        </dependency>
-
-        <dependency>
-            <groupId>com.beust</groupId>
-            <artifactId>jcommander</artifactId>
-            <version>1.19</version>
-        </dependency>
-
-        <dependency>
-            <groupId>ch.qos.logback</groupId>
-            <artifactId>logback-classic</artifactId>
-            <version>1.0.1</version>
-        </dependency>
-    </dependencies>
+    <modules>
+        <module>api</module>
+        <module>tools</module>
+    </modules>
 
     <build>
         <plugins>
-            <plugin>
-                <groupId>org.codehaus.mojo</groupId>
-                <artifactId>appassembler-maven-plugin</artifactId>
-                <version>1.2.2</version>
-                <configuration>
-                    <programs>
-                        <program>
-                            <mainClass>com.kalixia.xbee.tools.XBeeSniffer</mainClass>
-                            <name>xbee-sniffer</name>
-                        </program>
-                    </programs>
-                    <repositoryLayout>flat</repositoryLayout>
-                    <repositoryName>lib</repositoryName>
-                </configuration>
-                <executions>
-                    <execution>
-                        <phase>package</phase>
-                        <goals><goal>assemble</goal></goals>
-                    </execution>
-                </executions>
-            </plugin>
+
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-site-plugin</artifactId>
