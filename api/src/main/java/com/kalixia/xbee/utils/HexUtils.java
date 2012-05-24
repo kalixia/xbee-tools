@@ -16,6 +16,14 @@ public class HexUtils {
         return "";
     }
 
+    public static String toHexStringPrefixed(byte[] bytes) {
+        StringBuilder builder = new StringBuilder();
+        for (byte b : bytes) {
+            builder.append("0x").append(Integer.toHexString(b));
+        }
+        return builder.toString();
+    }
+
     public static String toHexStringPrefixed(int[]... array) {
         StringBuilder builder = new StringBuilder("0x");
         for (int[] sub : array) {

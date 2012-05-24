@@ -33,6 +33,10 @@ public class XBeeFrameDelimiterDecoder extends FrameDecoder {
 
         // read the packet length
         short length = buf.readShort();
+        if (length < 2) {
+            LOGGER.error("XBee Packet is too short: {} bytes!", length);
+            return null;
+        }
 
         // Make sure if there's enough bytes in the buffer.
         if (buf.readableBytes() < length + 1) {     // data to read + 1 byte for the checksum

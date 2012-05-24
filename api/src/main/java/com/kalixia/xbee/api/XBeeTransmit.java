@@ -5,7 +5,6 @@ import java.util.BitSet;
 public interface XBeeTransmit extends XBeeRequest {
     XBeeAddress getDestination();
     Options getOptions();
-    byte[] getData();
 
     /**
      * bit 0 = disable ack

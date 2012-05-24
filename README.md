@@ -6,7 +6,7 @@ XBee/ZigBee Java API and tools based on Netty.
 
 ### XBee Sniffer
 
-This utility displays the received XBee requests on the console.
+This utility displays the received XBee packets on the console.
 
 ### XBee recorder/player
 

@@ -51,7 +51,7 @@ public class XBeeSniffer {
                 pipeline.addLast("xbee-frame-delimiter", new XBeeFrameDelimiterDecoder());
                 pipeline.addLast("xbee-packet-decoder", new XBeePacketDecoder());
 
-                pipeline.addLast("xbee-request-logger", new XBeeRequestLoggerHandler());
+                pipeline.addLast("xbee-request-logger", new XBeeRequestLoggerHandler(false));
 
 //                pipeline.addLast("string-decoder", new StringDecoder());
 //                pipeline.addLast("logger", new LoggingHandler(true));
