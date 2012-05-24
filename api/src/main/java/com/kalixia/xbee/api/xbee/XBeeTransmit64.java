@@ -1,17 +1,17 @@
-package com.kalixia.xbee.api;
+package com.kalixia.xbee.api.xbee;
 
-public class XBeeTransmit16 implements XBeeTransmit {
-    private final XBeeAddress16 destination;
+public class XBeeTransmit64 implements XBeeTransmit {
+    private final XBeeAddress64 destination;
     private final Options options;
     private final byte[] data;
 
-    public XBeeTransmit16(XBeeAddress16 destination, Options options, byte[] data) {
+    public XBeeTransmit64(XBeeAddress64 destination, Options options, byte[] data) {
         this.destination = destination;
         this.options = options;
         this.data = data;
     }
 
-    public XBeeAddress16 getDestination() {
+    public XBeeAddress64 getDestination() {
         return destination;
     }
 
@@ -25,7 +25,7 @@ public class XBeeTransmit16 implements XBeeTransmit {
 
     @Override
     public String toString() {
-        return "XBeeTransmit16{" +
+        return "XBeeTransmit64{" +
                 "destination=" + destination +
                 ", options=" + options +
                 '}';

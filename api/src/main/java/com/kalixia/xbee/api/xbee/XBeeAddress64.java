@@ -1,4 +1,4 @@
-package com.kalixia.xbee.api;
+package com.kalixia.xbee.api.xbee;
 
 public class XBeeAddress64 implements XBeeAddress {
     private final long address;

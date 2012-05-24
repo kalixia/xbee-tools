@@ -1,4 +1,4 @@
-package com.kalixia.xbee.api;
+package com.kalixia.xbee.api.xbee;
 
 public enum XBeeModemStatus {
     HARDWARE_RESET(0), WATCHDOG_TIMER_RESET(1), ASSOCIATED(2), DISASSOCIATED(3),

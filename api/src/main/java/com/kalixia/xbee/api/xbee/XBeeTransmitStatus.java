@@ -1,4 +1,4 @@
-package com.kalixia.xbee.api;
+package com.kalixia.xbee.api.xbee;
 
 import java.util.BitSet;
 

@@ -1,13 +1,13 @@
 package com.kalixia.xbee.handler.codec.xbee;
 
-import com.kalixia.xbee.api.RSSI;
-import com.kalixia.xbee.api.XBeeAddress16;
-import com.kalixia.xbee.api.XBeeAddress64;
-import com.kalixia.xbee.api.XBeeModemStatus;
-import com.kalixia.xbee.api.XBeeReceive;
-import com.kalixia.xbee.api.XBeeReceive16;
-import com.kalixia.xbee.api.XBeeReceive64;
-import com.kalixia.xbee.api.XBeeTransmitStatus;
+import com.kalixia.xbee.api.xbee.RSSI;
+import com.kalixia.xbee.api.xbee.XBeeAddress16;
+import com.kalixia.xbee.api.xbee.XBeeAddress64;
+import com.kalixia.xbee.api.xbee.XBeeModemStatus;
+import com.kalixia.xbee.api.xbee.XBeeReceive;
+import com.kalixia.xbee.api.xbee.XBeeReceive16;
+import com.kalixia.xbee.api.xbee.XBeeReceive64;
+import com.kalixia.xbee.api.xbee.XBeeTransmitStatus;
 import io.netty.buffer.ChannelBuffer;
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelHandlerContext;

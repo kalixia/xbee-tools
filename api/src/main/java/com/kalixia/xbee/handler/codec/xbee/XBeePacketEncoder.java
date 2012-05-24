@@ -1,9 +1,9 @@
 package com.kalixia.xbee.handler.codec.xbee;
 
-import com.kalixia.xbee.api.XBeeRequest;
-import com.kalixia.xbee.api.XBeeTransmit;
-import com.kalixia.xbee.api.XBeeTransmit16;
-import com.kalixia.xbee.api.XBeeTransmit64;
+import com.kalixia.xbee.api.xbee.XBeeRequest;
+import com.kalixia.xbee.api.xbee.XBeeTransmit;
+import com.kalixia.xbee.api.xbee.XBeeTransmit16;
+import com.kalixia.xbee.api.xbee.XBeeTransmit64;
 import io.netty.buffer.ChannelBuffers;
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelHandlerContext;

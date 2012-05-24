@@ -1,7 +1,6 @@
 package com.kalixia.xbee.tools.sniffer;
 
-import com.kalixia.xbee.api.XBeeReceive;
-import com.kalixia.xbee.api.XBeeRequest;
+import com.kalixia.xbee.api.xbee.XBeeRequest;
 import com.kalixia.xbee.utils.HexUtils;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.MessageEvent;

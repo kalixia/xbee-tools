@@ -1,4 +1,4 @@
-package com.kalixia.xbee.api;
+package com.kalixia.xbee.api.xbee;
 
 public class XBeeReceive16 implements XBeeReceive {
     private final XBeeAddress16 source;
