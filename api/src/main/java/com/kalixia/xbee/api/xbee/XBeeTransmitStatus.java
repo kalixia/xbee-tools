@@ -1,8 +1,9 @@
 package com.kalixia.xbee.api.xbee;
 
+import java.io.Serializable;
 import java.util.BitSet;
 
-public class XBeeTransmitStatus {
+public class XBeeTransmitStatus implements Serializable {
     private final byte frameID;
     private final byte status;
 

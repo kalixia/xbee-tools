@@ -9,7 +9,7 @@
         <version>0.1</version>
     </parent>
     <artifactId>xbee-api</artifactId>
-    <name>XBee/ZigBee API</name>
+    <name>API</name>
     <description>XBee/ZigBee Java API based on Netty.</description>
 
     <dependencies>

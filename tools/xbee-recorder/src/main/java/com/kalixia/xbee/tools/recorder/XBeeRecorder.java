@@ -1,9 +1,10 @@
-package com.kalixia.xbee.tools.sniffer;
+package com.kalixia.xbee.tools.recorder;
 
 import com.beust.jcommander.JCommander;
 import com.beust.jcommander.Parameter;
 import com.kalixia.xbee.handler.codec.xbee.XBeeFrameDelimiterDecoder;
 import com.kalixia.xbee.handler.codec.xbee.XBeePacketDecoder;
+import com.sun.javafx.binding.StringFormatter;
 import io.netty.bootstrap.ClientBootstrap;
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelFuture;
@@ -12,6 +13,8 @@ import io.netty.channel.ChannelPipelineFactory;
 import io.netty.channel.Channels;
 import io.netty.channel.rxtx.RxtxChannelFactory;
 import io.netty.channel.rxtx.RxtxDeviceAddress;
+import io.netty.handler.logging.LoggingHandler;
+import io.netty.handler.stream.ChunkedWriteHandler;
 import io.netty.logging.InternalLoggerFactory;
 import io.netty.logging.Slf4JLoggerFactory;
 import org.slf4j.Logger;
@@ -24,14 +27,24 @@ import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-public class XBeeSniffer {
+public class XBeeRecorder {
     @Parameter(description = "The serial port to use for communication with the XBee module")
     public List<String> serialPorts = new ArrayList<String>();
 
     @Parameter(names = {"-b", "--baud"}, description = "Baud rate")
     private Integer baudRate = 9600;
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(XBeeSniffer.class);
+    @Parameter(names = {"-d", "--destination"}, description = "Destination file for the recording data")
+    private String destination;
+
+    @Parameter(names = {"-r", "--replay"}, description = "Recorded file to replay")
+    private String replay;
+
+    @Parameter(names = {"-f", "--format"}, description = "Format of the data: either 'string' or 'hex'",
+            converter = FormatConverter.class)
+    private Format format = Format.STRING;
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(XBeeRecorder.class);
 
     public void start() {
         // Configure Netty logging
@@ -51,10 +64,11 @@ public class XBeeSniffer {
                 pipeline.addLast("xbee-frame-delimiter", new XBeeFrameDelimiterDecoder());
                 pipeline.addLast("xbee-packet-decoder", new XBeePacketDecoder());
 
-                pipeline.addLast("xbee-request-logger", new XBeeRequestLoggerHandler(false));
+                if (destination != null)
+                    pipeline.addLast("xbee-recorder", new XBeeRecorderHandler(destination, format));
+                if (replay != null)
+                    pipeline.addLast("xbee-player", new XBeePlayerHandler(replay));
 
-//                pipeline.addLast("string-decoder", new StringDecoder());
-//                pipeline.addLast("logger", new LoggingHandler(true));
                 return pipeline;
             }
         });
@@ -95,16 +109,26 @@ public class XBeeSniffer {
 
     public static void main(String[] args) {
 //        String serialPort = "/dev/tty.usbserial-A100MZ0L";
-        XBeeSniffer sniffer = new XBeeSniffer();
-        JCommander commander = new JCommander(sniffer, args);
-        commander.setProgramName("xbee-sniffer");
+        XBeeRecorder recorder = new XBeeRecorder();
+        JCommander commander = null;
+        try {
+            commander = new JCommander(recorder, args);
+        } catch (Exception e) {
+            System.err.println(e.getMessage());
+            System.exit(-1);
+        }
+        commander.setProgramName("xbee-recorder");
 
-        if (sniffer.serialPorts.size() == 0) {
+        if (recorder.serialPorts.size() == 0) {
             commander.usage();
-            return;
+            System.exit(-1);
+        }
+        if (recorder.destination == null && recorder.replay == null) {
+            commander.usage();
+            System.exit(-1);
         }
 
-        sniffer.start();
+        recorder.start();
     }
 
 }

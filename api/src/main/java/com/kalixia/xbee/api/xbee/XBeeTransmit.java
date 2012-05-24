@@ -1,5 +1,6 @@
 package com.kalixia.xbee.api.xbee;
 
+import java.io.Serializable;
 import java.util.BitSet;
 
 public interface XBeeTransmit extends XBeeRequest {
@@ -11,7 +12,7 @@ public interface XBeeTransmit extends XBeeRequest {
      * bit 2 = PAN broadcast
      * other bits must be 0
      */
-    public class Options {
+    public class Options implements Serializable {
         private final boolean disableAck;
         private final boolean panBroadcast;
 

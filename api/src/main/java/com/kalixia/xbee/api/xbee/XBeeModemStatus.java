@@ -1,6 +1,8 @@
 package com.kalixia.xbee.api.xbee;
 
-public enum XBeeModemStatus {
+import java.io.Serializable;
+
+public enum XBeeModemStatus implements Serializable {
     HARDWARE_RESET(0), WATCHDOG_TIMER_RESET(1), ASSOCIATED(2), DISASSOCIATED(3),
     SYNCHRONIZATION_LOST(4), COORDINATOR_REALIGNMENT(5), COORDINATOR_STARTED(6);
 

@@ -1,10 +1,12 @@
 package com.kalixia.xbee.api.xbee;
 
+import java.io.Serializable;
+
 /**
  * Received Signal Strength Indicator.
  * Hexadecimal equivalent of (-dBM) value.
  */
-public class RSSI {
+public class RSSI implements Serializable {
     private final int value;
 
     public RSSI(int value) {

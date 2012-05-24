@@ -1,6 +1,8 @@
 package com.kalixia.xbee.api.xbee;
 
-public interface XBeeAddress {
+import java.io.Serializable;
+
+public interface XBeeAddress extends Serializable {
     /**
      * Return the length of the address in bytes.
      * @return the length of the address in bytes

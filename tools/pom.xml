@@ -9,12 +9,13 @@
         <version>0.1</version>
     </parent>
     <artifactId>xbee-tools</artifactId>
-    <name>XBee/ZigBee Tools</name>
+    <name>Tools</name>
     <packaging>pom</packaging>
     <description>XBee/ZigBee Tools.</description>
 
     <modules>
         <module>xbee-sniffer</module>
+        <module>xbee-recorder</module>
     </modules>
 
     <dependencyManagement>

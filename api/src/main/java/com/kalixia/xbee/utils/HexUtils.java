@@ -19,7 +19,7 @@ public class HexUtils {
     public static String toHexStringPrefixed(byte[] bytes) {
         StringBuilder builder = new StringBuilder();
         for (byte b : bytes) {
-            builder.append("0x").append(Integer.toHexString(b));
+            builder.append("0x").append(Integer.toHexString(b)).append(' ');
         }
         return builder.toString();
     }
