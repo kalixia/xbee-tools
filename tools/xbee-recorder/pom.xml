@@ -37,6 +37,10 @@
                             <mainClass>com.kalixia.xbee.tools.recorder.XBeeRecorder</mainClass>
                             <name>xbee-recorder</name>
                         </program>
+                        <program>
+                            <mainClass>com.kalixia.xbee.tools.recorder.XBeeReplayer</mainClass>
+                            <name>xbee-replayer</name>
+                        </program>
                     </programs>
                     <repositoryLayout>flat</repositoryLayout>
                     <repositoryName>lib</repositoryName>

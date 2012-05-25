@@ -39,10 +39,10 @@ public class XBeeRecorderHandler extends SimpleChannelHandler {
             LOGGER.debug("Stored request {}: {}", count, request);
             switch (format) {
                 case STRING:
-                    System.out.printf("[XBee Packet %d] %s", count, new String(request.getData()));
+                    System.out.printf("[XBee Packet %3d] %s", count, new String(request.getData()));
                     break;
                 case HEX:
-                    System.out.printf("[XBee Packet %d] %s", count, HexUtils.toHexStringPrefixed(request.getData()));
+                    System.out.printf("[XBee Packet %3d] %s", count, HexUtils.toHexStringPrefixed(request.getData()));
                     break;
             }
         }
@@ -61,9 +61,9 @@ public class XBeeRecorderHandler extends SimpleChannelHandler {
 
     @Override
     public void exceptionCaught(ChannelHandlerContext ctx, ExceptionEvent e) {
-        LOGGER.error("Unexpected exception", e.getCause());
-        Channel ch = e.getChannel();
-        ch.close();
+        LOGGER.error("Unexpected exception -- ignoring XBee Packet", e.getCause());
+//        Channel ch = e.getChannel();
+//        ch.close();
     }
 
 }

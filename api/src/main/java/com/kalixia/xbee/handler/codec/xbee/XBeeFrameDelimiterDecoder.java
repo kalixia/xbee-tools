@@ -29,6 +29,7 @@ public class XBeeFrameDelimiterDecoder extends FrameDecoder {
         if (start != START_DELIMITER) {
             LOGGER.error("Oops, received {} instead of {}",
                     Integer.toHexString(start), Integer.toHexString(START_DELIMITER));
+            throw new IllegalStateException("Invalid start delimiter");
         }
 
         // read the packet length
