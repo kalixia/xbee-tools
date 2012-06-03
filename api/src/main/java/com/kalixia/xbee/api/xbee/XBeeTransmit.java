@@ -1,5 +1,6 @@
 package com.kalixia.xbee.api.xbee;
 
+import com.kalixia.xbee.utils.BitSetUtils;
 import java.io.Serializable;
 import java.util.BitSet;
 
@@ -25,7 +26,7 @@ public interface XBeeTransmit extends XBeeRequest {
             BitSet bs = new BitSet(8);
             bs.set(0, disableAck);
             bs.set(2, panBroadcast);
-            return bs.toByteArray()[0];
+            return BitSetUtils.fromBitSet(bs)[0];
         }
 
         @Override

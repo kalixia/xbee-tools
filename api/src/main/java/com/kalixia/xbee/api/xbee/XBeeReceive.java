@@ -1,5 +1,6 @@
 package com.kalixia.xbee.api.xbee;
 
+import com.kalixia.xbee.utils.BitSetUtils;
 import java.io.Serializable;
 import java.util.BitSet;
 
@@ -19,7 +20,7 @@ public interface XBeeReceive extends XBeeRequest {
         private final boolean panBroadcast;
 
         public Options(byte flags) {
-            BitSet bs = BitSet.valueOf(new byte[] { flags });
+            BitSet bs = BitSetUtils.toBitSet(flags);
             addressBroadcast = bs.get(1);
             panBroadcast = bs.get(2);
         }

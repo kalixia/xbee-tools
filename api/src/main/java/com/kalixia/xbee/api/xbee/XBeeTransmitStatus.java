@@ -1,5 +1,6 @@
 package com.kalixia.xbee.api.xbee;
 
+import com.kalixia.xbee.utils.BitSetUtils;
 import java.io.Serializable;
 import java.util.BitSet;
 
@@ -10,7 +11,7 @@ public class XBeeTransmitStatus implements Serializable {
     public XBeeTransmitStatus(byte frameID, byte status) {
         this.frameID = frameID;
         this.status = status;
-        BitSet bs = BitSet.valueOf(new byte[] { status });
+        BitSet bs = BitSetUtils.toBitSet(status);
     }
 
     /**

@@ -120,6 +120,8 @@ public class XBeeReplayer {
             System.exit(-1);
         }
 
+        System.setProperty("gnu.io.rxtx.SerialPorts", recorder.serialPorts.get(0));
+
         recorder.replay();
     }
 

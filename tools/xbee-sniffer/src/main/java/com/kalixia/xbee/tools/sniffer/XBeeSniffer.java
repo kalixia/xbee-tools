@@ -104,6 +104,8 @@ public class XBeeSniffer {
             return;
         }
 
+        System.setProperty("gnu.io.rxtx.SerialPorts", sniffer.serialPorts.get(0));
+
         sniffer.start();
     }
 
