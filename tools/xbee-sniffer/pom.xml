@@ -35,7 +35,7 @@
                     <programs>
                         <program>
                             <mainClass>com.kalixia.xbee.tools.recorder.XBeeSniffer</mainClass>
-                            <name>xbee-recorder</name>
+                            <name>xbee-sniffer</name>
                         </program>
                     </programs>
                     <repositoryLayout>flat</repositoryLayout>

@@ -1,5 +1,6 @@
 package com.kalixia.xbee.tools.recorder;
 
+import com.kalixia.xbee.api.xbee.XBeeReceive;
 import com.kalixia.xbee.api.xbee.XBeeRequest;
 import com.kalixia.xbee.utils.HexUtils;
 import io.netty.channel.Channel;
@@ -31,18 +32,22 @@ public class XBeeRecorderHandler extends SimpleChannelHandler {
 
     @Override
     public void messageReceived(ChannelHandlerContext ctx, MessageEvent e) throws Exception {
-        if (e.getMessage() instanceof XBeeRequest) {
-            XBeeRequest request = (XBeeRequest) e.getMessage();
+        if (e.getMessage() instanceof XBeeReceive) {
+            XBeeReceive request = (XBeeReceive) e.getMessage();
             oos.writeObject(request);
             oos.flush();
             long count = counter.incrementAndGet();
             LOGGER.debug("Stored request {}: {}", count, request);
             switch (format) {
                 case STRING:
-                    System.out.printf("[XBee Packet %3d] %s", count, new String(request.getData()));
+                    System.out.printf("[XBee Packet %3d] [RSSI: %s ] [Source: %s] %s", count,
+                            request.getRssi(), request.getSource(),
+                            new String(request.getData()));
                     break;
                 case HEX:
-                    System.out.printf("[XBee Packet %3d] %s", count, HexUtils.toHexStringPrefixed(request.getData()));
+                    System.out.printf("[XBee Packet %3d] [RSSI: %s ] [Source: %s] %s", count,
+                            request.getRssi(), request.getSource(),
+                            HexUtils.toHexStringPrefixed(request.getData()));
                     break;
             }
         }

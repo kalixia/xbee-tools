@@ -13,6 +13,7 @@ import org.slf4j.LoggerFactory;
  */
 public class XBeeFrameDelimiterDecoder extends FrameDecoder {
     private static final int START_DELIMITER = 0x7E;
+    private static final int MAX_LENGTH = 110;
     private static final Logger LOGGER = LoggerFactory.getLogger(XBeeFrameDelimiterDecoder.class);
 
     @Override
