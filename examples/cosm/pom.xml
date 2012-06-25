@@ -5,19 +5,24 @@
     <modelVersion>4.0.0</modelVersion>
     <parent>
         <groupId>com.kalixia.xbee</groupId>
-        <artifactId>xbee-tools</artifactId>
+        <artifactId>xbee-examples</artifactId>
         <version>0.1</version>
     </parent>
-    <artifactId>xbee-sniffer</artifactId>
-    <name>Tools :: Sniffer</name>
+    <artifactId>cosm</artifactId>
+    <name>Examples :: COSM/Pachube</name>
 
-    <description>XBee/ZigBee Sniffer.</description>
+    <description>Relay XBee packets to COSM/Pachube</description>
 
     <dependencies>
         <dependency>
             <groupId>${project.groupId}</groupId>
             <artifactId>xbee-api</artifactId>
             <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>io.netty</groupId>
+            <artifactId>netty-codec-http</artifactId>
+            <version>${netty.version}</version>
         </dependency>
         <dependency>
             <groupId>com.beust</groupId>
@@ -34,8 +39,8 @@
                 <configuration>
                     <programs>
                         <program>
-                            <mainClass>com.kalixia.xbee.tools.sniffer.XBeeSniffer</mainClass>
-                            <name>xbee-sniffer</name>
+                            <mainClass>com.kalixia.xbee.examples.cosm.XBeeCosm</mainClass>
+                            <name>xbee-cosm</name>
                         </program>
                     </programs>
                     <repositoryLayout>flat</repositoryLayout>
