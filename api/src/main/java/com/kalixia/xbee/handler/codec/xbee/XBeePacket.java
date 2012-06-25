@@ -1,12 +1,15 @@
 package com.kalixia.xbee.handler.codec.xbee;
 
 import io.netty.buffer.ChannelBuffer;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 class XBeePacket {
     private final XBeeApiIdentifier apiIdentifier;
     private final int length;
     private final ChannelBuffer data;
     private final byte checksum;
+    private static final Logger LOGGER = LoggerFactory.getLogger(XBeePacket.class);
 
     public XBeePacket(XBeeApiIdentifier apiIdentifier, int length, ChannelBuffer data) {
         this.apiIdentifier = apiIdentifier;
@@ -60,6 +63,7 @@ class XBeePacket {
         }
         computed += checksum;
         data.resetReaderIndex();
+        LOGGER.debug("Computed checksum is {}", Integer.toHexString((byte)computed));
         return (computed == (byte) 0xFF);
     }
 }

@@ -7,12 +7,29 @@ public class XBeeAddress64 implements XBeeAddress {
         this.address = address;
     }
 
+    public int getLength() {
+        return 8;
+    }
+
     @Override
     public String toString() {
         return "0x" + Long.toHexString(address);
     }
 
-    public int getLength() {
-        return 8;
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        XBeeAddress64 that = (XBeeAddress64) o;
+
+        if (address != that.address) return false;
+
+        return true;
+    }
+
+    @Override
+    public int hashCode() {
+        return (int) (address ^ (address >>> 32));
     }
 }
