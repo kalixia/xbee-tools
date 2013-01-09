@@ -155,7 +155,7 @@
     </build>
 
     <properties>
-        <netty.version>4.0.0.Alpha1-SNAPSHOT</netty.version>
+        <netty.version>4.0.0.Beta1-SNAPSHOT</netty.version>
     </properties>
     
 </project>

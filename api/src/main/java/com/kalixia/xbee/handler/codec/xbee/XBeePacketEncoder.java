@@ -4,10 +4,8 @@ import com.kalixia.xbee.api.xbee.XBeeRequest;
 import com.kalixia.xbee.api.xbee.XBeeTransmit;
 import com.kalixia.xbee.api.xbee.XBeeTransmit16;
 import com.kalixia.xbee.api.xbee.XBeeTransmit64;
-import io.netty.buffer.ChannelBuffers;
-import io.netty.channel.Channel;
 import io.netty.channel.ChannelHandlerContext;
-import io.netty.handler.codec.oneone.OneToOneEncoder;
+import io.netty.handler.codec.MessageToMessageEncoder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -17,12 +15,11 @@ import org.slf4j.LoggerFactory;
  *
  * This encoder only work with AP = 1 yet.
  */
-public class XBeePacketEncoder extends OneToOneEncoder {
+public class XBeePacketEncoder extends MessageToMessageEncoder<XBeeRequest> {
     private static final Logger LOGGER = LoggerFactory.getLogger(XBeePacketEncoder.class);
 
     @Override
-    protected Object encode(ChannelHandlerContext ctx, Channel channel, Object msg) throws Exception {
-        XBeeRequest request = (XBeeRequest) msg;
+    protected Object encode(ChannelHandlerContext ctx, XBeeRequest request) throws Exception {
         XBeePacket packet;
         if (request instanceof XBeeTransmit) {
             XBeeTransmit transmitRequest = (XBeeTransmit) request;
@@ -31,9 +28,9 @@ public class XBeePacketEncoder extends OneToOneEncoder {
             //                 + length(destination) + length(options) + length(data)
             int length = 1 + 1 + transmitRequest.getDestination().getLength() + 1 + data.length;
             if (request instanceof XBeeTransmit16)
-                packet = new XBeePacket(XBeeApiIdentifier.TX_PACKET_16, length, ChannelBuffers.wrappedBuffer(data));
+                packet = new XBeePacket(XBeeApiIdentifier.TX_PACKET_16, length, data);
             else if (request instanceof XBeeTransmit64)
-                packet = new XBeePacket(XBeeApiIdentifier.TX_PACKET_64, length, ChannelBuffers.wrappedBuffer(data));
+                packet = new XBeePacket(XBeeApiIdentifier.TX_PACKET_64, length, data);
             else
                 throw new IllegalArgumentException("Unknown XBeeTransmit");
         } else {

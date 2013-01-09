@@ -1,24 +1,23 @@
 package com.kalixia.xbee.handler.codec.xbee;
 
-import io.netty.buffer.ChannelBuffer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 class XBeePacket {
     private final XBeeApiIdentifier apiIdentifier;
     private final int length;
-    private final ChannelBuffer data;
+    private final byte[] data;
     private final byte checksum;
     private static final Logger LOGGER = LoggerFactory.getLogger(XBeePacket.class);
 
-    public XBeePacket(XBeeApiIdentifier apiIdentifier, int length, ChannelBuffer data) {
+    public XBeePacket(XBeeApiIdentifier apiIdentifier, int length, byte[] data) {
         this.apiIdentifier = apiIdentifier;
         this.length = length;
         this.data = data;
         this.checksum = calculateChecksum();
     }
 
-    public XBeePacket(XBeeApiIdentifier apiIdentifier, int length, ChannelBuffer data, byte checksum) {
+    public XBeePacket(XBeeApiIdentifier apiIdentifier, int length, byte[] data, byte checksum) {
         this.apiIdentifier = apiIdentifier;
         this.length = length;
         this.data = data;
@@ -33,7 +32,7 @@ class XBeePacket {
         return length;
     }
 
-    public ChannelBuffer getData() {
+    public byte[] getData() {
         return data;
     }
 
@@ -43,11 +42,9 @@ class XBeePacket {
 
     public byte calculateChecksum() {
         byte computed = apiIdentifier.getApiIdentifier();
-        data.markReaderIndex();
         for (int i = 0; i < length - 1; i++) {
-            computed += data.readByte();
+            computed += data[i];
         }
-        data.resetReaderIndex();
         return (byte) (0xFF - computed);
     }
 
@@ -57,12 +54,10 @@ class XBeePacket {
      */
     public boolean verifyChecksum() {
         byte computed = apiIdentifier.getApiIdentifier();
-        data.markReaderIndex();
         for (int i = 0; i < length - 1; i++) {
-            computed += data.readByte();
+            computed += data[i];
         }
         computed += checksum;
-        data.resetReaderIndex();
         LOGGER.debug("Computed checksum is {}", Integer.toHexString((byte)computed));
         return (computed == (byte) 0xFF);
     }

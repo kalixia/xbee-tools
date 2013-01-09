@@ -1,17 +1,10 @@
 package com.kalixia.xbee.handler.codec.xbee;
 
-import com.kalixia.xbee.api.xbee.RSSI;
-import com.kalixia.xbee.api.xbee.XBeeAddress16;
-import com.kalixia.xbee.api.xbee.XBeeAddress64;
-import com.kalixia.xbee.api.xbee.XBeeModemStatus;
-import com.kalixia.xbee.api.xbee.XBeeReceive;
-import com.kalixia.xbee.api.xbee.XBeeReceive16;
-import com.kalixia.xbee.api.xbee.XBeeReceive64;
-import com.kalixia.xbee.api.xbee.XBeeTransmitStatus;
-import io.netty.buffer.ChannelBuffer;
-import io.netty.channel.Channel;
+import com.kalixia.xbee.api.xbee.*;
+import io.netty.buffer.ByteBuf;
+import io.netty.buffer.Unpooled;
 import io.netty.channel.ChannelHandlerContext;
-import io.netty.handler.codec.oneone.OneToOneDecoder;
+import io.netty.handler.codec.MessageToMessageDecoder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -21,13 +14,12 @@ import org.slf4j.LoggerFactory;
  *
  * This decoder only work with AP = 1 yet.
  */
-public class XBeePacketDecoder extends OneToOneDecoder {
+public class XBeePacketDecoder extends MessageToMessageDecoder<XBeePacket> {
     private static final Logger LOGGER = LoggerFactory.getLogger(XBeePacketDecoder.class);
 
     @Override
-    protected Object decode(ChannelHandlerContext ctx, Channel channel, Object msg) throws Exception {
-        XBeePacket packet = (XBeePacket) msg;
-        ChannelBuffer data = ((XBeePacket) msg).getData();
+    protected Object decode(ChannelHandlerContext ctx, XBeePacket packet) throws Exception {
+        ByteBuf data = Unpooled.wrappedBuffer(packet.getData());
 
         switch (packet.getApiIdentifier()) {
             case MODEM_STATUS: {
