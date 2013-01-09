@@ -5,7 +5,8 @@ public interface XBee {
 
     XBee withModemConfiguration(XBeeModemConfiguration configuration);
 
-    XBeeReceive send(XBeeRequest request);
+    XBeeFuture send(XBeeRequest request);
+    XBeeFuture sendAtRequest(String request);
 
     XBee addListener(XBeeListener listener);
 }
