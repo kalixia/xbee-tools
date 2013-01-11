@@ -42,7 +42,7 @@
     <modules>
         <module>api</module>
         <module>tools</module>
-        <module>examples</module>
+        <!--<module>examples</module>-->
     </modules>
 
     <dependencyManagement>

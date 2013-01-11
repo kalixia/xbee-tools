@@ -6,7 +6,8 @@ enum XBeeApiIdentifier {
     TX_PACKET_16(0x01, "TX (Transmit) Request: 16-bit address"),
     TX_STATUS(0x89, "TX (Transmit) Status"),
     RX_PACKET_64(0x80, "RX (Receive) Packet: 64-bit Address"),
-    RX_PACKET_16(0x81, "RX (Receive) Packet: 16-bit Address");
+    RX_PACKET_16(0x81, "RX (Receive) Packet: 16-bit Address"),
+    ZB_RX_PACKET(0x90, "ZigBee RX (Receive) Packet");
 
     private byte identifier;
     private String description;
@@ -29,7 +30,7 @@ enum XBeeApiIdentifier {
             if (id.getApiIdentifier() == identifier)
                 return id;
         }
-        throw new IllegalArgumentException("Unknown API identifier " + identifier);
+        throw new IllegalArgumentException(String.format("Unknown API identifier 0x%x", identifier));
     }
 
 }

@@ -1,7 +1,7 @@
 package com.kalixia.xbee.handler.codec.xbee;
 
 import com.kalixia.xbee.api.xbee.*;
-import io.netty.buffer.ByteBuf;
+import com.kalixia.xbee.api.zigbee.ZigBeeReceive;import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.handler.codec.MessageToMessageDecoder;
@@ -42,13 +42,22 @@ public class XBeePacketDecoder extends MessageToMessageDecoder<XBeePacket> {
                 data.readBytes(appData);
                 return new XBeeReceive64(source, rssi, options, appData);
             }
+            case ZB_RX_PACKET: {
+                byte frameID = data.readByte();
+                XBeeAddress64 source64 = new XBeeAddress64(data.readLong());
+                XBeeAddress16 source16 = new XBeeAddress16(data.readShort());
+                XBeeReceive.Options options = new XBeeReceive.Options(data.readByte());
+                byte appData[] = new byte[data.readableBytes()];
+                data.readBytes(appData);
+                return new ZigBeeReceive(frameID, source64, source16, options, appData);
+            }
             case TX_STATUS: {
                 byte frameID = data.readByte();
                 byte status = data.readByte();
                 return new XBeeTransmitStatus(frameID, status);
             }
             default:
-                LOGGER.error("Unknown API identifier " + packet.getApiIdentifier());
+                LOGGER.error(String.format("Unknown API identifier 0x%x", packet.getApiIdentifier()));
                 return null;
         }
     }

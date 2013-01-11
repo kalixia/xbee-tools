@@ -1,23 +1,19 @@
 package com.kalixia.xbee.tools.recorder;
 
 import com.kalixia.xbee.api.xbee.XBeeReceive;
-import com.kalixia.xbee.api.xbee.XBeeRequest;
 import com.kalixia.xbee.utils.HexUtils;
-import io.netty.channel.Channel;
 import io.netty.channel.ChannelHandlerContext;
-import io.netty.channel.ExceptionEvent;
-import io.netty.channel.MessageEvent;
-import io.netty.channel.SimpleChannelHandler;
-import io.netty.channel.WriteCompletionEvent;
+import io.netty.channel.ChannelInboundMessageHandlerAdapter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectOutputStream;
 import java.util.concurrent.atomic.AtomicLong;
 
-public class XBeeRecorderHandler extends SimpleChannelHandler {
+public class XBeeRecorderHandler extends ChannelInboundMessageHandlerAdapter<XBeeReceive> {
     private final Format format;
     private final FileOutputStream fos;
     private final ObjectOutputStream oos;
@@ -31,44 +27,23 @@ public class XBeeRecorderHandler extends SimpleChannelHandler {
     }
 
     @Override
-    public void messageReceived(ChannelHandlerContext ctx, MessageEvent e) throws Exception {
-        if (e.getMessage() instanceof XBeeReceive) {
-            XBeeReceive request = (XBeeReceive) e.getMessage();
-            oos.writeObject(request);
-            oos.flush();
-            long count = counter.incrementAndGet();
-            LOGGER.debug("Stored request {}: {}", count, request);
-            switch (format) {
-                case STRING:
-                    System.out.printf("[XBee Packet %3d] [RSSI: %s ] [Source: %s] %s", count,
-                            request.getRssi(), request.getSource(),
-                            new String(request.getData()));
-                    break;
-                case HEX:
-                    System.out.printf("[XBee Packet %3d] [RSSI: %s ] [Source: %s] %s", count,
-                            request.getRssi(), request.getSource(),
-                            HexUtils.toHexStringPrefixed(request.getData()));
-                    break;
-            }
+    protected void messageReceived(ChannelHandlerContext ctx, XBeeReceive request) throws Exception {
+        oos.writeObject(request);
+        oos.flush();
+        long count = counter.incrementAndGet();
+        LOGGER.debug("Stored request {}: {}", count, request);
+        switch (format) {
+            case STRING:
+                System.out.printf("[XBee Packet %3d] [RSSI: %s ] [Source: %s] %s%n", count,
+                        request.getRssi(), request.getSource(),
+                        new String(request.getData()));
+                break;
+            case HEX:
+                System.out.printf("[XBee Packet %3d] [RSSI: %s ] [Source: %s] %s%n", count,
+                        request.getRssi(), request.getSource(),
+                        HexUtils.toHexStringPrefixed(request.getData()));
+                break;
         }
-        super.messageReceived(ctx, e);
-    }
-
-    @Override
-    public void writeComplete(ChannelHandlerContext ctx, WriteCompletionEvent e) throws Exception {
-//        if (e instanceof MessageEvent) {
-//            XBeeRequest request = (XBeeRequest) ((MessageEvent) e).getMessage();
-//            LOGGER.info("Storing: " + request);
-//            LOGGER.info("should store response");
-//        }
-        super.writeComplete(ctx, e);
-    }
-
-    @Override
-    public void exceptionCaught(ChannelHandlerContext ctx, ExceptionEvent e) {
-        LOGGER.error("Unexpected exception -- ignoring XBee Packet", e.getCause());
-//        Channel ch = e.getChannel();
-//        ch.close();
     }
 
 }
