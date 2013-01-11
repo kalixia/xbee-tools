@@ -41,7 +41,7 @@ class XBeePacket {
     }
 
     public byte calculateChecksum() {
-        byte computed = apiIdentifier.getApiIdentifier();
+        byte computed = 0;
         for (int i = 0; i < length - 1; i++) {
             computed += data[i];
         }
@@ -58,7 +58,7 @@ class XBeePacket {
             computed += data[i];
         }
         computed += checksum;
-        LOGGER.debug("Computed checksum is {}", Integer.toHexString((byte)computed));
+        LOGGER.trace("Computed checksum is {}", Integer.toHexString((byte)computed));
         return (computed == (byte) 0xFF);
     }
 }
