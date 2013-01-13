@@ -1,5 +1,7 @@
 package com.kalixia.xbee.api.xbee;
 
+import io.netty.buffer.ByteBuf;
+
 public class XBeeReceive16 implements XBeeReceive {
     private final XBeeAddress16 source;
     private final RSSI rssi;
@@ -27,6 +29,11 @@ public class XBeeReceive16 implements XBeeReceive {
 
     public byte[] getData() {
         return data;
+    }
+
+    @Override
+    public ByteBuf serialize() {
+        throw new UnsupportedOperationException();
     }
 
     @Override

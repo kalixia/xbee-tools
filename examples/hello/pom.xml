@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <groupId>com.kalixia.xbee</groupId>
+        <artifactId>xbee-tools</artifactId>
+        <version>0.1</version>
+    </parent>
+    <groupId>com.kalixia.xbee.examples</groupId>
+    <artifactId>hello</artifactId>
+    <name>Example :: Hello</name>
+
+    <description>Echo the received content.</description>
+
+    <dependencies>
+        <dependency>
+            <groupId>com.kalixia.xbee</groupId>
+            <artifactId>xbee-api</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.beust</groupId>
+            <artifactId>jcommander</artifactId>
+        </dependency>
+    </dependencies>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>appassembler-maven-plugin</artifactId>
+                <version>1.2.2</version>
+                <configuration>
+                    <programs>
+                        <program>
+                            <mainClass>com.kalixia.xbee.tools.recorder.XBeeRecorder</mainClass>
+                            <name>xbee-recorder</name>
+                        </program>
+                        <program>
+                            <mainClass>com.kalixia.xbee.tools.recorder.XBeeReplayer</mainClass>
+                            <name>xbee-replayer</name>
+                        </program>
+                    </programs>
+                    <repositoryLayout>flat</repositoryLayout>
+                    <repositoryName>lib</repositoryName>
+                </configuration>
+                <executions>
+                    <execution>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>assemble</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
+
+</project>

@@ -1,6 +1,7 @@
 package com.kalixia.xbee.api.zigbee;
 
 import com.kalixia.xbee.api.xbee.*;
+import io.netty.buffer.ByteBuf;
 
 public class ZigBeeReceive implements ZigBeeRequest, XBeeReceive {
     private final byte frameID;
@@ -46,5 +47,10 @@ public class ZigBeeReceive implements ZigBeeRequest, XBeeReceive {
 
     public byte[] getData() {
         return data;
+    }
+
+    @Override
+    public ByteBuf serialize() {
+        throw new UnsupportedOperationException();
     }
 }

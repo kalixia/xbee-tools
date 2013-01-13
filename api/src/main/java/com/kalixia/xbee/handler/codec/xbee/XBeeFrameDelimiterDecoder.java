@@ -12,7 +12,7 @@ import org.slf4j.LoggerFactory;
  * Decoder which analyzes serial data input and generate appropriate frames as {@link XBeePacket}s.
  */
 public class XBeeFrameDelimiterDecoder extends ByteToMessageDecoder {
-    private static final byte START_DELIMITER = 0x7E;
+    public static final byte START_DELIMITER = 0x7E;
     private static final int MAX_LENGTH = 110;
     private static final Logger LOGGER = LoggerFactory.getLogger(XBeeFrameDelimiterDecoder.class);
 

@@ -1,8 +1,10 @@
-package com.kalixia.xbee.tools.recorder;
+package com.kalixia.xbee.examples.echo;
 
 import com.beust.jcommander.JCommander;
 import com.beust.jcommander.Parameter;
+import com.kalixia.xbee.handler.codec.xbee.XBeeFrameDelimiterDecoder;
 import com.kalixia.xbee.handler.codec.xbee.XBeeFrameEncoder;
+import com.kalixia.xbee.handler.codec.xbee.XBeePacketDecoder;
 import io.netty.bootstrap.Bootstrap;
 import io.netty.channel.ChannelFuture;
 import io.netty.channel.ChannelInitializer;
@@ -19,23 +21,16 @@ import org.slf4j.LoggerFactory;
 import java.util.ArrayList;
 import java.util.List;
 
-public class XBeeReplayer {
+public class XBeeEcho {
     @Parameter(description = "The serial port to use for communication with the XBee module")
     public List<String> serialPorts = new ArrayList<String>();
 
     @Parameter(names = {"-b", "--baud"}, description = "Baud rate")
     private Integer baudRate = 9600;
 
-    @Parameter(names = {"-s", "--source"}, description = "Recorded file to replay")
-    private String replay;
+    private static final Logger LOGGER = LoggerFactory.getLogger(XBeeEcho.class);
 
-//    @Parameter(names = {"-f", "--format"}, description = "Format of the data: either 'string' or 'hex'",
-//            converter = FormatConverter.class)
-//    private Format format = Format.STRING;
-
-    private static final Logger LOGGER = LoggerFactory.getLogger(XBeeReplayer.class);
-
-    public void replay() throws InterruptedException {
+    public void echo() throws InterruptedException {
         // Configure Netty logging
         InternalLoggerFactory.setDefaultFactory(new Slf4JLoggerFactory());
 
@@ -50,13 +45,15 @@ public class XBeeReplayer {
                         @Override
                         public void initChannel(RxtxChannel ch) throws Exception {
                             ChannelPipeline pipeline = ch.pipeline();
-                            pipeline.addLast("xbee-player", new XBeePlayerHandler(replay));
+                            pipeline.addLast("xbee-frame-delimiter", new XBeeFrameDelimiterDecoder());
+                            pipeline.addLast("xbee-packet-decoder", new XBeePacketDecoder());
                             pipeline.addLast("xbee-packet-encoder", new XBeeFrameEncoder());
+                            pipeline.addLast("xbee-echo", new XBeeEchoHandler());
                         }
                     });
+            LOGGER.info("Listening for serial data on {} at {} bauds...", serialPorts.get(0), baudRate);
             ChannelFuture f = b.connect().sync();
             f.channel().closeFuture().sync();
-            LOGGER.info("Listening for serial data on {} at {} bauds...", serialPorts.get(0), baudRate);
         } finally {
             b.shutdown();
         }
@@ -64,28 +61,24 @@ public class XBeeReplayer {
 
     public static void main(String[] args) throws InterruptedException {
 //        String serialPort = "/dev/tty.usbserial-A100MZ0L";
-        XBeeReplayer recorder = new XBeeReplayer();
+        XBeeEcho echo = new XBeeEcho();
         JCommander commander = null;
         try {
-            commander = new JCommander(recorder, args);
+            commander = new JCommander(echo, args);
         } catch (Exception e) {
             System.err.println(e.getMessage());
             System.exit(-1);
         }
-        commander.setProgramName("xbee-replayer");
+        commander.setProgramName("echo");
 
-        if (recorder.serialPorts.size() == 0) {
-            commander.usage();
-            System.exit(-1);
-        }
-        if (recorder.replay == null) {
+        if (echo.serialPorts.size() == 0) {
             commander.usage();
             System.exit(-1);
         }
 
-        System.setProperty("gnu.io.rxtx.SerialPorts", recorder.serialPorts.get(0));
+        System.setProperty("gnu.io.rxtx.SerialPorts", echo.serialPorts.get(0));
 
-        recorder.replay();
+        echo.echo();
     }
 
 }

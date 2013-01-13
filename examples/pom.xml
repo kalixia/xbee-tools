@@ -14,7 +14,9 @@
     <description>XBee/ZigBee Examples.</description>
 
     <modules>
-        <module>cosm</module>
+        <module>hello</module>
+        <module>echo</module>
+        <!--<module>cosm</module>-->
     </modules>
 
     <dependencyManagement>

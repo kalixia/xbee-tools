@@ -5,6 +5,7 @@ import java.io.Serializable;
 import java.util.BitSet;
 
 public interface XBeeTransmit extends XBeeRequest {
+    byte getFrameID();
     XBeeAddress getDestination();
     Options getOptions();
 
