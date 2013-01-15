@@ -2,6 +2,7 @@ package com.kalixia.xbee.examples.modeminfo;
 
 import com.beust.jcommander.JCommander;
 import com.beust.jcommander.Parameter;
+import com.kalixia.xbee.handler.codec.xbee.XBeeFrameDelimiterDecoder;
 import com.kalixia.xbee.handler.codec.xbee.XBeeFrameEncoder;
 import com.kalixia.xbee.handler.codec.xbee.XBeePacketDecoder;
 import io.netty.bootstrap.Bootstrap;
@@ -61,7 +62,8 @@ public class XBeeModemInfo {
 //                            pipeline.addLast(new LineBasedFrameDecoder(80));
 //                            pipeline.addLast(new StringDecoder(CharsetUtil.UTF_8));
 
-                            pipeline.addLast("xbee-frame-decoder", new XBeePacketDecoder());
+                            pipeline.addLast("xbee-frame-decoder", new XBeeFrameDelimiterDecoder());
+                            pipeline.addLast("xbee-packet-decoder", new XBeePacketDecoder());
                             pipeline.addLast("xbee-frame-encoder", new XBeeFrameEncoder());
 
                             pipeline.addLast("xbee-modem-info-decoder", new XBeeModemInfoDecoder());

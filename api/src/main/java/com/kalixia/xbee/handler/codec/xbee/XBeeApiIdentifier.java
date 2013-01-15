@@ -6,6 +6,7 @@ enum XBeeApiIdentifier {
     AT_COMMAND(0x08, "AT Command"),
     RX_PACKET_64(0x80, "RX (Receive) Packet: 64-bit Address"),
     RX_PACKET_16(0x81, "RX (Receive) Packet: 16-bit Address"),
+    AT_COMMAND_RESPONSE(0x88, "AT Command Response"),
     TX_STATUS(0x89, "TX (Transmit) Status"),
     MODEM_STATUS(0x8A, "Modem Status"),
     ZB_RX_PACKET(0x90, "ZigBee RX (Receive) Packet");

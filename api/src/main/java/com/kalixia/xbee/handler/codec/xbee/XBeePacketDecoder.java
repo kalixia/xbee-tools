@@ -56,6 +56,14 @@ public class XBeePacketDecoder extends MessageToMessageDecoder<XBeePacket> {
                 byte status = data.readByte();
                 return new XBeeTransmitStatus(frameID, status);
             }
+            case AT_COMMAND_RESPONSE: {
+                byte frameID = data.readByte();
+                String command = new String(new byte[] { data.readByte(), data.readByte() });
+                XBeeAtCommandResponse.Status status = XBeeAtCommandResponse.Status.fromValue(data.readByte());
+                byte valueData[] = new byte[data.readableBytes()];
+                data.readBytes(valueData);
+                return new XBeeAtCommandResponse(frameID, command, status, valueData);
+            }
             default:
                 LOGGER.error(String.format("Unknown API identifier 0x%x", packet.getApiIdentifier()));
                 return null;
