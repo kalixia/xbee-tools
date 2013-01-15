@@ -1,51 +1,24 @@
 package com.kalixia.xbee.examples.hello;
 
-import io.netty.buffer.ByteBuf;
+import com.kalixia.xbee.api.xbee.XBeeAddress16;
+import com.kalixia.xbee.api.xbee.XBeeTransmit;
+import com.kalixia.xbee.api.xbee.XBeeTransmit16;
 import io.netty.channel.ChannelHandlerContext;
-import io.netty.handler.codec.MessageToByteEncoder;
+import io.netty.handler.codec.MessageToMessageEncoder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class XBeeHelloEncoder extends MessageToByteEncoder<String> {
+public class XBeeHelloEncoder extends MessageToMessageEncoder<String> {
     private static final Logger LOGGER = LoggerFactory.getLogger(XBeeHelloEncoder.class);
 
     @Override
-    protected void encode(ChannelHandlerContext ctx, String msg, ByteBuf out) throws Exception {
+    protected Object encode(ChannelHandlerContext ctx, String msg) throws Exception {
         if ("exit\n".equals(msg)) {
             ctx.close();
-            return;
+            return null;
         }
 
-        byte apiIdentifier = 0x01;
-        byte frameID = 0;
-        byte dh = (byte) 0xFF;
-        byte dl = (byte) 0xFF;
-        byte options = 0;
-
-        out.writeByte(0x7E);                            // start delimiter
-        out.writeShort(1 + 1 + 2 + 1 + msg.length());   // length
-        out.writeByte(apiIdentifier);                   // API identifier
-        out.writeByte(frameID);                         // frame ID
-        out.writeByte(dh);
-        out.writeByte(dl);                              // destination address
-        out.writeByte(options);                         // options
-
-        for (int i = 0; i < msg.length(); i++)
-            out.writeByte(msg.charAt(i));
-
-        byte checksum = 0;
-        checksum += apiIdentifier;
-        checksum += frameID;
-        checksum += dh;
-        checksum += dl;
-        checksum += options;
-
-        for (int i = 0; i < msg.length(); i++)
-            checksum += msg.charAt(i);
-
-        out.writeByte(checksum);                        // checksum
-
-        LOGGER.info("Sent {}", msg);
+        return new XBeeTransmit16((byte) 1, XBeeAddress16.BROADCAST,
+                new XBeeTransmit.Options(false, true), msg.getBytes("UTF-8"));
     }
-
 }

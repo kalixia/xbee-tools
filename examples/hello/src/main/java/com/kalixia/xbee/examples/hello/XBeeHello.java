@@ -2,6 +2,7 @@ package com.kalixia.xbee.examples.hello;
 
 import com.beust.jcommander.JCommander;
 import com.beust.jcommander.Parameter;
+import com.kalixia.xbee.handler.codec.xbee.XBeeFrameEncoder;
 import io.netty.bootstrap.Bootstrap;
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelFuture;
@@ -24,6 +25,11 @@ import org.slf4j.LoggerFactory;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Sends two XBee frames as broadcast, so any receiver should receive it.
+ * The first message is <tt>hello</tt>, the second one <tt>world!</tt>.
+ * The example exits after sending those two mesages.
+ */
 public class XBeeHello {
     @Parameter(description = "The serial port to use for communication with the XBee module")
     public List<String> serialPorts = new ArrayList<String>();
@@ -50,10 +56,12 @@ public class XBeeHello {
                             ChannelPipeline pipeline = ch.pipeline();
                             pipeline.addLast(new ByteLoggingHandler(LogLevel.INFO));
 
-                            pipeline.addLast("xbee-hello-encoder", new XBeeHelloEncoder());
+                            pipeline.addLast("xbee-frame-encoder", new XBeeFrameEncoder());
 
                             pipeline.addLast(new LineBasedFrameDecoder(80));
                             pipeline.addLast(new StringDecoder(CharsetUtil.UTF_8));
+
+                            pipeline.addLast("xbee-hello-encoder", new XBeeHelloEncoder());
                             pipeline.addLast("xbee-hello-decoder", new XBeeHelloDecoder());
                         }
                     });
@@ -69,7 +77,7 @@ public class XBeeHello {
 //            channel.write("world!\n");
 
 //            LOGGER.info("Exiting example application now");
-//            channel.write("exit").sync();
+//            channel.write("exit\n").sync();
 
             channel.closeFuture().sync();
         } finally {
