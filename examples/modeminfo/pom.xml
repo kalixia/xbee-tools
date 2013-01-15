@@ -9,10 +9,10 @@
         <version>0.1</version>
     </parent>
     <groupId>com.kalixia.xbee.examples</groupId>
-    <artifactId>hello</artifactId>
-    <name>Example :: Hello</name>
+    <artifactId>modeminfo</artifactId>
+    <name>Example :: Modem Info</name>
 
-    <description>Sends "Hello World!" as two XBee packets.</description>
+    <description>Prints information about the XBee Modem.</description>
 
     <dependencies>
         <dependency>
