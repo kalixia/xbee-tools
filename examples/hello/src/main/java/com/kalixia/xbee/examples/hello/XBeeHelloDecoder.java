@@ -11,14 +11,12 @@ public class XBeeHelloDecoder extends ChannelInboundMessageHandlerAdapter<String
     @Override
     public void channelActive(ChannelHandlerContext ctx) {
         ctx.write("hello\n");
+        ctx.write("world!\n");
+        ctx.write("exit\n");
     }
 
     @Override
     protected void messageReceived(ChannelHandlerContext ctx, String msg) throws Exception {
-        if ("exit".equals(msg)) {
-            ctx.close();
-            return;
-        }
         LOGGER.info("Received {}", msg);
     }
 }

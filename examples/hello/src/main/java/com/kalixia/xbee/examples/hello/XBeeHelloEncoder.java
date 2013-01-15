@@ -11,6 +11,11 @@ public class XBeeHelloEncoder extends MessageToByteEncoder<String> {
 
     @Override
     protected void encode(ChannelHandlerContext ctx, String msg, ByteBuf out) throws Exception {
+        if ("exit\n".equals(msg)) {
+            ctx.close();
+            return;
+        }
+
         byte apiIdentifier = 0x01;
         byte frameID = 0;
         byte dh = (byte) 0xFF;
@@ -36,7 +41,7 @@ public class XBeeHelloEncoder extends MessageToByteEncoder<String> {
         checksum += options;
 
         for (int i = 0; i < msg.length(); i++)
-            out.writeByte(msg.charAt(i));
+            checksum += msg.charAt(i);
 
         out.writeByte(checksum);                        // checksum
 
