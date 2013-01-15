@@ -1,5 +1,6 @@
 package com.kalixia.xbee.examples.modeminfo;
 
+import com.kalixia.xbee.api.xbee.XBeeAtCommand;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelInboundMessageHandlerAdapter;
 import org.slf4j.Logger;
@@ -10,8 +11,9 @@ public class XBeeModemInfoDecoder extends ChannelInboundMessageHandlerAdapter<St
 
     @Override
     public void channelActive(ChannelHandlerContext ctx) {
-        ctx.write("ID\n");
-        ctx.write("exit\n");
+//        ctx.write("ID\n");
+//        ctx.write("exit\n");
+        ctx.write(new XBeeAtCommand((byte) 1, "ID"));
     }
 
     @Override

@@ -36,7 +36,7 @@ public class XBeeAtCommand implements XBeeRequest {
 
     @Override
     public ByteBuf serialize() {
-        ByteBuf buf = Unpooled.buffer(1 + 2 + data.length);
+        ByteBuf buf = Unpooled.buffer(1 + 2 + (data == null ? 0 : data.length));
         buf.writeByte(getFrameID());
         buf.writeBytes(command.getBytes());
         if (data != null)

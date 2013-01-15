@@ -1,5 +1,6 @@
 package com.kalixia.xbee.handler.codec.xbee;
 
+import com.kalixia.xbee.api.xbee.XBeeAtCommand;
 import com.kalixia.xbee.api.xbee.XBeeRequest;
 import com.kalixia.xbee.api.xbee.XBeeTransmit16;
 import io.netty.buffer.ByteBuf;
@@ -31,6 +32,8 @@ public class XBeeFrameEncoder extends MessageToByteEncoder<XBeeRequest> {
 
         if (request instanceof XBeeTransmit16) {
             raw.writeByte(XBeeApiIdentifier.TX_PACKET_16.getApiIdentifier());
+        } else if (request instanceof XBeeAtCommand) {
+            raw.writeByte(XBeeApiIdentifier.AT_COMMAND.getApiIdentifier());
         } else {
             throw new UnsupportedOperationException(String.format("Can't encode %s packets",
                     request.getClass().getName()));

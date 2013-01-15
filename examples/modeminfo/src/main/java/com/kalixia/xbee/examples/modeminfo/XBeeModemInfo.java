@@ -58,14 +58,14 @@ public class XBeeModemInfo {
 
                             pipeline.addLast(new ByteLoggingHandler(LogLevel.INFO));
 
-                            pipeline.addLast(new LineBasedFrameDecoder(80));
-                            pipeline.addLast(new StringDecoder(CharsetUtil.UTF_8));
-
-                            pipeline.addLast("xbee-modem-info-decoder", new XBeeModemInfoDecoder());
-                            pipeline.addLast("xbee-modem-info-encoder", new XBeeModemInfoEncoder());
+//                            pipeline.addLast(new LineBasedFrameDecoder(80));
+//                            pipeline.addLast(new StringDecoder(CharsetUtil.UTF_8));
 
                             pipeline.addLast("xbee-frame-decoder", new XBeePacketDecoder());
                             pipeline.addLast("xbee-frame-encoder", new XBeeFrameEncoder());
+
+                            pipeline.addLast("xbee-modem-info-decoder", new XBeeModemInfoDecoder());
+                            pipeline.addLast("xbee-modem-info-encoder", new XBeeModemInfoEncoder());
 
 //                            pipeline.addLast(new StringEncoder(CharsetUtil.UTF_8));
                         }
