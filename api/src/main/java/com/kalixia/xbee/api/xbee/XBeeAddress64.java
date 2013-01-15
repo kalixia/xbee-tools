@@ -2,7 +2,7 @@ package com.kalixia.xbee.api.xbee;
 
 public class XBeeAddress64 implements XBeeAddress {
     private final long address;
-    public static final XBeeAddress16 BROADCAST = new XBeeAddress16(0x000000000000FFFF);
+    public static final XBeeAddress16 BROADCAST = new XBeeAddress16(0x0000FFFF);
 
     public XBeeAddress64(long address) {
         this.address = address;

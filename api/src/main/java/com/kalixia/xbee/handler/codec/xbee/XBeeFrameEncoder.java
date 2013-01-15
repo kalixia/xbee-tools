@@ -30,16 +30,20 @@ public class XBeeFrameEncoder extends MessageToByteEncoder<XBeeRequest> {
         out.writeByte(XBeeFrameDelimiterDecoder.START_DELIMITER);
         out.writeShort(length);
 
+        byte apiIdentifier;
         if (request instanceof XBeeTransmit16) {
-            raw.writeByte(XBeeApiIdentifier.TX_PACKET_16.getApiIdentifier());
+            apiIdentifier = XBeeApiIdentifier.TX_PACKET_16.getApiIdentifier();
         } else if (request instanceof XBeeAtCommand) {
-            raw.writeByte(XBeeApiIdentifier.AT_COMMAND.getApiIdentifier());
+            apiIdentifier = XBeeApiIdentifier.AT_COMMAND.getApiIdentifier();
         } else {
             throw new UnsupportedOperationException(String.format("Can't encode %s packets",
                     request.getClass().getName()));
         }
 
+        raw.writeByte(apiIdentifier);
+        LOGGER.debug("Added {}" + apiIdentifier);
         raw.writeBytes(packet);
+        LOGGER.debug("Added {}", packet);
 
         byte checksum = calculateChecksum(raw);
 
@@ -48,12 +52,13 @@ public class XBeeFrameEncoder extends MessageToByteEncoder<XBeeRequest> {
     }
 
     public byte calculateChecksum(ByteBuf data) {
-        byte computed = 0;
+        int computed = 0;
         data.markReaderIndex();
-        for (int i = 0; i < data.readableBytes() - 1; i++) {
-            computed += data.readByte();
+        int bufferSize = data.readableBytes();
+        for (int i = 0; i < bufferSize; i++) {
+            computed = (computed + (data.readByte() & 0xFF)) & 0xFF;
         }
         data.resetReaderIndex();
-        return (byte) (0xFF - computed);
+        return (byte) ((0xFF - computed) & 0xFF);
     }
 }

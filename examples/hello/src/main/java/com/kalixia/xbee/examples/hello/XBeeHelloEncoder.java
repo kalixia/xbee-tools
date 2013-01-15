@@ -1,6 +1,7 @@
 package com.kalixia.xbee.examples.hello;
 
 import com.kalixia.xbee.api.xbee.XBeeAddress16;
+import com.kalixia.xbee.utils.XBeeFrameIdGenerator;
 import com.kalixia.xbee.api.xbee.XBeeTransmit;
 import com.kalixia.xbee.api.xbee.XBeeTransmit16;
 import io.netty.channel.ChannelHandlerContext;
@@ -18,7 +19,8 @@ public class XBeeHelloEncoder extends MessageToMessageEncoder<String> {
             return null;
         }
 
-        return new XBeeTransmit16((byte) 1, XBeeAddress16.BROADCAST,
-                new XBeeTransmit.Options(false, true), msg.getBytes("UTF-8"));
+//        LOGGER.info("Sending '{}'...", msg);
+        return new XBeeTransmit16(XBeeFrameIdGenerator.nextFrameID(), XBeeAddress16.BROADCAST,
+                new XBeeTransmit.Options(false, false), msg.getBytes("UTF-8"));
     }
 }
