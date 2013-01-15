@@ -1,13 +1,24 @@
 package com.kalixia.xbee.examples.hello;
 
-import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
-import io.netty.handler.codec.ByteToMessageDecoder;
+import io.netty.channel.ChannelInboundMessageHandlerAdapter;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
-public class XBeeHelloDecoder extends ByteToMessageDecoder {
+public class XBeeHelloDecoder extends ChannelInboundMessageHandlerAdapter<String> {
+    private static final Logger LOGGER = LoggerFactory.getLogger(XBeeHelloDecoder.class);
+
     @Override
-    protected Object decode(ChannelHandlerContext ctx, ByteBuf in) throws Exception {
-        in.discardReadBytes();
-        return "";
+    public void channelActive(ChannelHandlerContext ctx) {
+        ctx.write("hello\n");
+    }
+
+    @Override
+    protected void messageReceived(ChannelHandlerContext ctx, String msg) throws Exception {
+        if ("exit".equals(msg)) {
+            ctx.close();
+            return;
+        }
+        LOGGER.info("Received {}", msg);
     }
 }
