@@ -2,6 +2,13 @@
 
 XBee/ZigBee Java API and tools based on Netty.
 
+*This stuff is still work in progress. Highly unstable right now!*
+
+This library can be used at different levels:
+* on a high level, this is a Java API for XBee modules,
+* on a low level, this is a bunch of Netty handlers allowing you to easily create gateways
+(for example Serial -> Cloud via HTTP calls).
+
 ## Tools
 
 ### XBee Sniffer
@@ -13,7 +20,5 @@ This utility displays the received XBee packets on the console.
 This utility can record received data packets and replay them. 
 
 ## Notes
-
-*This stuff is still work in progress. Nothing usable right now!*
 
 Please note that only XBee/ZigBee modules configured to use API level 1 works with these tools.
