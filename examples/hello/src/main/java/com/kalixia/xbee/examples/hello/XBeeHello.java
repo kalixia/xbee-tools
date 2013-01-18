@@ -4,10 +4,10 @@ import com.beust.jcommander.JCommander;
 import com.beust.jcommander.Parameter;
 import com.kalixia.xbee.handler.codec.xbee.XBeeRequestEncoder;
 import io.netty.bootstrap.Bootstrap;
-import io.netty.channel.Channel;
-import io.netty.channel.ChannelFuture;
-import io.netty.channel.ChannelInitializer;
-import io.netty.channel.ChannelPipeline;
+import io.netty.buffer.ByteBuf;
+import io.netty.buffer.ByteBufAllocator;
+import io.netty.buffer.MessageBuf;
+import io.netty.channel.*;
 import io.netty.channel.rxtx.RxtxChannel;
 import io.netty.channel.rxtx.RxtxChannelOption;
 import io.netty.channel.rxtx.RxtxDeviceAddress;
@@ -18,12 +18,16 @@ import io.netty.handler.logging.ByteLoggingHandler;
 import io.netty.handler.logging.LogLevel;
 import io.netty.logging.InternalLoggerFactory;
 import io.netty.logging.Slf4JLoggerFactory;
+import io.netty.util.Attribute;
+import io.netty.util.AttributeKey;
 import io.netty.util.CharsetUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.net.SocketAddress;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 /**
  * Sends two XBee frames as broadcast, so any receiver should receive it.
@@ -46,6 +50,7 @@ public class XBeeHello {
         // Configure the client
         Bootstrap b = new Bootstrap();
         try {
+//            b.group(new OioEventLoopGroup())
             b.group(new OioEventLoopGroup())
                     .channel(RxtxChannel.class)
                     .remoteAddress(new RxtxDeviceAddress(serialPorts.get(0)))
@@ -69,6 +74,15 @@ public class XBeeHello {
             ChannelFuture f = b.connect().sync();
 
             Channel channel = f.channel();
+
+            channel.pipeline().context(XBeeHelloDecoder.class).write("hello\n").syncUninterruptibly();
+//            channel.eventLoop().execute(new Runnable() {
+//                @Override
+//                public void run() {
+//                    LOGGER.info("hello");
+//                }
+//            });
+//            channel.pipeline().write("hello\n").sync();
 
 //            LOGGER.info("Sending first message");
 //            channel.write("hello\n");

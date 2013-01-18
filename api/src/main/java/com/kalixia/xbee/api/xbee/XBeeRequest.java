@@ -12,4 +12,5 @@ public interface XBeeRequest extends Serializable {
      * @return the data to send to the XBee module
      */
     ByteBuf serialize();
+
 }

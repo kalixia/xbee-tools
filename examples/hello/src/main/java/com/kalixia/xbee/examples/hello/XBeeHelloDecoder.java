@@ -10,9 +10,9 @@ public class XBeeHelloDecoder extends ChannelInboundMessageHandlerAdapter<String
 
     @Override
     public void channelActive(ChannelHandlerContext ctx) {
-        ctx.write("hello\n");
-        ctx.write("world!\n");
-        ctx.write("exit\n");
+//        ctx.write("hello\n");
+//        ctx.write("world!\n");
+//        ctx.write("exit\n");
     }
 
     @Override

@@ -17,7 +17,7 @@ public interface XBee {
      */
     XBee stop() throws InterruptedException;
 
-    XBeeModemInfo getModemInfo();
+    XBeeModemInfo getModemInfo() throws InterruptedException;
 
     XBeeModemStatus getModemStatus();
 
