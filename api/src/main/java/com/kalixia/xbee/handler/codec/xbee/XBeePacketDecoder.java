@@ -11,11 +11,19 @@ import org.slf4j.LoggerFactory;
 /**
  * Decoder which creates the appropriate API object.
  * Expect the input to be a {@link XBeePacket}, hence is usually preceded with the {@link XBeeFrameDelimiterDecoder}.
- *
- * This decoder only work with AP = 1 yet.
+ * <p>
+ * <strong>This decoder only work with AP = 1 yet</strong>
  */
 public class XBeePacketDecoder extends MessageToMessageDecoder<XBeePacket> {
+    private final int apVersion;
     private static final Logger LOGGER = LoggerFactory.getLogger(XBeePacketDecoder.class);
+
+    public XBeePacketDecoder(int apVersion) {
+        super(XBeePacket.class);
+        if (apVersion != 1)
+            throw new IllegalArgumentException("The only API mode supported is the AP 1 yet");
+        this.apVersion = apVersion;
+    }
 
     @Override
     protected Object decode(ChannelHandlerContext ctx, XBeePacket packet) throws Exception {
@@ -68,5 +76,10 @@ public class XBeePacketDecoder extends MessageToMessageDecoder<XBeePacket> {
                 LOGGER.error(String.format("Unknown API identifier 0x%x", packet.getApiIdentifier()));
                 return null;
         }
+    }
+
+    @Override
+    public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) throws Exception {
+        cause.printStackTrace();
     }
 }

@@ -12,12 +12,12 @@ import org.slf4j.LoggerFactory;
 
 /**
  * Encoder which creates the appropriate XBee frame data to send to the XBee module.
- * Expect the input to be an {@link XBeeRequest} object from the API.
+ * Expect the input to be an {@link com.kalixia.xbee.api.xbee.XBeeRequest} object from the API.
  *
  * This encoder only work with AP = 1 yet.
  */
-public class XBeeFrameEncoder extends MessageToByteEncoder<XBeeRequest> {
-    private static final Logger LOGGER = LoggerFactory.getLogger(XBeeFrameEncoder.class);
+public class XBeeRequestEncoder extends MessageToByteEncoder<XBeeRequest> {
+    private static final Logger LOGGER = LoggerFactory.getLogger(XBeeRequestEncoder.class);
 
     @Override
     protected void encode(ChannelHandlerContext ctx, XBeeRequest request, ByteBuf out) throws Exception {
@@ -41,14 +41,14 @@ public class XBeeFrameEncoder extends MessageToByteEncoder<XBeeRequest> {
         }
 
         raw.writeByte(apiIdentifier);
-        LOGGER.debug("Added {}" + apiIdentifier);
         raw.writeBytes(packet);
-        LOGGER.debug("Added {}", packet);
 
         byte checksum = calculateChecksum(raw);
 
         out.writeBytes(raw);
         out.writeByte(checksum);
+
+        LOGGER.info("Sent XBee request {}", request);
     }
 
     public byte calculateChecksum(ByteBuf data) {
@@ -60,5 +60,10 @@ public class XBeeFrameEncoder extends MessageToByteEncoder<XBeeRequest> {
         }
         data.resetReaderIndex();
         return (byte) ((0xFF - computed) & 0xFF);
+    }
+
+    @Override
+    public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) throws Exception {
+        cause.printStackTrace();
     }
 }

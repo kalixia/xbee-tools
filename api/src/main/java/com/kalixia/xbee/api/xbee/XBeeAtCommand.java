@@ -1,5 +1,6 @@
 package com.kalixia.xbee.api.xbee;
 
+import com.kalixia.xbee.utils.HexUtils;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
 
@@ -42,5 +43,16 @@ public class XBeeAtCommand implements XBeeRequest {
         if (data != null)
             buf.writeBytes(data);
         return buf;
+    }
+
+    @Override
+    public String toString() {
+        final StringBuilder sb = new StringBuilder();
+        sb.append("XBeeAtCommand");
+        sb.append("{frameID=").append(frameID);
+        sb.append(", command='").append(command).append('\'');
+        sb.append(", data=").append(data == null ? "null" : HexUtils.toHexStringPrefixed(data));
+        sb.append('}');
+        return sb.toString();
     }
 }

@@ -11,9 +11,9 @@ import io.netty.channel.ChannelPipeline;
 import io.netty.channel.socket.oio.OioEventLoopGroup;
 import io.netty.logging.InternalLoggerFactory;
 import io.netty.logging.Slf4JLoggerFactory;
-import io.netty.transport.rxtx.RxtxChannel;
-import io.netty.transport.rxtx.RxtxChannelOptions;
-import io.netty.transport.rxtx.RxtxDeviceAddress;
+import io.netty.channel.rxtx.RxtxChannel;
+import io.netty.channel.rxtx.RxtxChannelOption;
+import io.netty.channel.rxtx.RxtxDeviceAddress;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -39,13 +39,13 @@ public class XBeeSniffer {
             b.group(new OioEventLoopGroup())
                     .channel(RxtxChannel.class)
                     .remoteAddress(new RxtxDeviceAddress(serialPorts.get(0)))
-                    .option(RxtxChannelOptions.BAUD_RATE, baudRate)
+                    .option(RxtxChannelOption.BAUD_RATE, baudRate)
                     .handler(new ChannelInitializer<RxtxChannel>() {
                         @Override
                         public void initChannel(RxtxChannel ch) throws Exception {
                             ChannelPipeline pipeline = ch.pipeline();
                             pipeline.addLast("xbee-frame-delimiter", new XBeeFrameDelimiterDecoder());
-                            pipeline.addLast("xbee-packet-decoder", new XBeePacketDecoder());
+                            pipeline.addLast("xbee-packet-decoder", new XBeePacketDecoder(1));
                             pipeline.addLast("xbee-request-logger", new XBeeRequestLoggerHandler(false));
 //                            pipeline.addLast("string-decoder", new StringDecoder());
 //                            pipeline.addLast("logger", new LoggingHandler(true));

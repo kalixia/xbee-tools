@@ -1,6 +1,6 @@
 package com.kalixia.xbee.api.xbee;
 
-import com.kalixia.xbee.handler.codec.xbee.XBeeFrameEncoder;
+import com.kalixia.xbee.handler.codec.xbee.XBeeRequestEncoder;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
 import org.junit.Test;
@@ -16,6 +16,6 @@ public class ChecksumTest {
 
         ByteBuf buf = Unpooled.wrappedBuffer(data);
 
-        assertEquals((byte) (0xe1 & 0xff), new XBeeFrameEncoder().calculateChecksum(buf));
+        assertEquals((byte) (0xe1 & 0xff), new XBeeRequestEncoder().calculateChecksum(buf));
     }
 }

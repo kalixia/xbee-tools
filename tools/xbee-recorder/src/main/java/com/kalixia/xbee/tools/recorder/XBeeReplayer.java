@@ -2,17 +2,17 @@ package com.kalixia.xbee.tools.recorder;
 
 import com.beust.jcommander.JCommander;
 import com.beust.jcommander.Parameter;
-import com.kalixia.xbee.handler.codec.xbee.XBeeFrameEncoder;
+import com.kalixia.xbee.handler.codec.xbee.XBeeRequestEncoder;
 import io.netty.bootstrap.Bootstrap;
 import io.netty.channel.ChannelFuture;
 import io.netty.channel.ChannelInitializer;
 import io.netty.channel.ChannelPipeline;
+import io.netty.channel.rxtx.RxtxChannel;
+import io.netty.channel.rxtx.RxtxChannelOption;
+import io.netty.channel.rxtx.RxtxDeviceAddress;
 import io.netty.channel.socket.oio.OioEventLoopGroup;
 import io.netty.logging.InternalLoggerFactory;
 import io.netty.logging.Slf4JLoggerFactory;
-import io.netty.transport.rxtx.RxtxChannel;
-import io.netty.transport.rxtx.RxtxChannelOptions;
-import io.netty.transport.rxtx.RxtxDeviceAddress;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -45,13 +45,13 @@ public class XBeeReplayer {
             b.group(new OioEventLoopGroup())
                     .channel(RxtxChannel.class)
                     .remoteAddress(new RxtxDeviceAddress(serialPorts.get(0)))
-                    .option(RxtxChannelOptions.BAUD_RATE, baudRate)
+                    .option(RxtxChannelOption.BAUD_RATE, baudRate)
                     .handler(new ChannelInitializer<RxtxChannel>() {
                         @Override
                         public void initChannel(RxtxChannel ch) throws Exception {
                             ChannelPipeline pipeline = ch.pipeline();
                             pipeline.addLast("xbee-player", new XBeePlayerHandler(replay));
-                            pipeline.addLast("xbee-packet-encoder", new XBeeFrameEncoder());
+                            pipeline.addLast("xbee-request-encoder", new XBeeRequestEncoder());
                         }
                     });
             ChannelFuture f = b.connect().sync();

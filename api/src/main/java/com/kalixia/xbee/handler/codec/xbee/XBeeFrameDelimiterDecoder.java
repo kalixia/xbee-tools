@@ -80,4 +80,9 @@ public class XBeeFrameDelimiterDecoder extends ByteToMessageDecoder {
         // Successfully decoded a frame.  Return the decoded frame.
         return packet;
     }
+
+    @Override
+    public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) throws Exception {
+        cause.printStackTrace();
+    }
 }
