@@ -11,8 +11,7 @@ public class XBeeRequestDecoder extends MessageToMessageEncoder<XBeeRequest> {
 
     @Override
     protected Object encode(ChannelHandlerContext ctx, XBeeRequest msg) throws Exception {
-        LOGGER.info("ici");
-        return null;
+        return msg;
     }
 
     @Override
