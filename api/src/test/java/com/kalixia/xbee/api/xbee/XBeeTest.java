@@ -21,7 +21,9 @@ public class XBeeTest {
         XBeeModemInfo modemInfo = xbee.getModemInfo();
         assertNotNull(modemInfo);
         assertEquals(0x1234, modemInfo.getPanID());
-//        xbee.stop();
+        assertEquals(0x0C, modemInfo.getChannel());
+        assertNotNull(modemInfo.getLocalAddress());
+        xbee.stop();
     }
 
     public static void main(String[] args) throws InterruptedException {

@@ -1,6 +1,7 @@
 package com.kalixia.xbee.api.xbee;
 
 import com.kalixia.xbee.handler.codec.xbee.*;
+import com.kalixia.xbee.utils.HexUtils;
 import com.kalixia.xbee.utils.XBeeFrameIdGenerator;
 import io.netty.bootstrap.Bootstrap;
 import io.netty.bootstrap.ServerBootstrap;
@@ -14,6 +15,7 @@ import io.netty.channel.rxtx.RxtxChannelOption;
 import io.netty.channel.rxtx.RxtxDeviceAddress;
 import io.netty.channel.socket.nio.NioEventLoopGroup;
 import io.netty.channel.socket.oio.OioEventLoopGroup;
+import io.netty.handler.codec.MessageToMessageDecoder;
 import io.netty.handler.logging.LogLevel;
 import io.netty.handler.logging.LoggingHandler;
 import io.netty.logging.InternalLoggerFactory;
@@ -56,13 +58,13 @@ class XBeeImpl implements XBee {
             ChannelFuture f = rxtxBootstrap.connect().sync();
 
             channel = f.channel();
-            channel.closeFuture().addListener(new ChannelFutureListener() {
-                @Override
-                public void operationComplete(ChannelFuture future) throws Exception {
-                    LOGGER.info("Stopping XBee channel pipeline...");
-                    stopNetty();
-                }
-            });
+//            channel.closeFuture().addListener(new ChannelFutureListener() {
+//                @Override
+//                public void operationComplete(ChannelFuture future) throws Exception {
+//                    LOGGER.info("Stopping XBee channel pipeline...");
+//                    stopNetty();
+//                }
+//            });
         } finally {
             rxtxBootstrap.shutdown();
         }
@@ -77,29 +79,50 @@ class XBeeImpl implements XBee {
     }
 
     private void stopNetty() throws InterruptedException {
-//        LOGGER.info("Waiting for 30 seconds for the XBee channel pipeline to stop...");
-//        channel.closeFuture().await(30, TimeUnit.SECONDS);
-//        rxtxBootstrap.shutdown();
+        rxtxBootstrap.shutdown();
         channel.closeFuture().sync();
     }
 
     @Override
-    public XBeeModemInfo getModemInfo() {
-        try {
-            LOGGER.debug("Trying to write ATID command in channel {}", channel);
-            ChannelFuture future = channel.write(new XBeeAtCommand(XBeeFrameIdGenerator.nextFrameID(), "ID"));
-            future.await(TIMEOUT);
-            LOGGER.debug("Completed? {}", future.isDone());
-        } catch (InterruptedException e) {
-            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
-        }
-//                .addListener(new ChannelFutureListener() {
-//                    @Override
-//                    public void operationComplete(ChannelFuture future) throws Exception {
-//                        LOGGER.info("Waiting for result of ATID!");
-//                    }
-//                });
-        return new XBeeModemInfo((short) 0x1234);
+    public XBeeModemInfo getModemInfo() throws InterruptedException {
+        final XBeeModemInfo modemInfo = new XBeeModemInfo();
+        channel.pipeline().addLast("modem-info", new ChannelInboundMessageHandlerAdapter<XBeeAtCommandResponse>() {
+            @Override
+            protected void messageReceived(ChannelHandlerContext ctx, XBeeAtCommandResponse msg) throws Exception {
+                byte[] data = msg.getData();
+                if ("ID".equals(msg.getCommand())) {
+                    short panID = (short) ((data[0] & 0xFF) * 256 + data[1]);
+                    LOGGER.debug("Found PAN ID: 0x{}", Integer.toHexString(panID));
+                    modemInfo.setPanID(panID);
+                } else if ("CH".equals(msg.getCommand())) {
+                    modemInfo.setChannel(data[0]);
+                } else if ("MY".equals(msg.getCommand())) {
+                    short localAddress = (short) ((data[0] & 0xFF) * 256 + data[1]);
+                    XBeeAddress16 address = new XBeeAddress16(localAddress);
+                    modemInfo.setLocalAddress(address);
+                    LOGGER.debug("Local XBee Address is {}", address);
+                } else if ("NI".equals(msg.getCommand())) {
+                    String name = new String(data);
+                    LOGGER.debug("Node name is {}", name);
+                    modemInfo.setName(name);
+                } else {
+                    LOGGER.error("Received unexpected XBee message: {}", msg);
+                }
+            }
+        });
+
+        // TODO: go through {@link #sendAtRequest} instead!
+        channel.write(new XBeeAtCommand(XBeeFrameIdGenerator.nextFrameID(), "ID"));
+        channel.write(new XBeeAtCommand(XBeeFrameIdGenerator.nextFrameID(), "CH"));
+        channel.write(new XBeeAtCommand(XBeeFrameIdGenerator.nextFrameID(), "MY"));
+        channel.write(new XBeeAtCommand(XBeeFrameIdGenerator.nextFrameID(), "NI"));
+
+        while (channel.isActive())
+            Thread.sleep(100);
+        channel.pipeline().remove("modem-info");
+
+//        LOGGER.info("Modem info is {}", modemInfo);
+        return modemInfo;
     }
 
     @Override

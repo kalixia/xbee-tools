@@ -6,15 +6,12 @@ import io.netty.handler.codec.MessageToMessageEncoder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.net.ConnectException;
-
 public class XBeeRequestDecoder extends MessageToMessageEncoder<XBeeRequest> {
     private static final Logger LOGGER = LoggerFactory.getLogger(XBeeRequestDecoder.class);
 
     @Override
     protected Object encode(ChannelHandlerContext ctx, XBeeRequest msg) throws Exception {
-        LOGGER.info("ici");
-        return null;
+        return msg;
     }
 
     @Override
