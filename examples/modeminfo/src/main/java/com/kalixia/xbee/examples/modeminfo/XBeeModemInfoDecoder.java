@@ -24,6 +24,8 @@ public class XBeeModemInfoDecoder extends ChannelInboundMessageHandlerAdapter<XB
         ctx.write(new XBeeAtCommand(XBeeFrameIdGenerator.nextFrameID(), "CH"));
         ctx.write(new XBeeAtCommand(XBeeFrameIdGenerator.nextFrameID(), "MY"));
         ctx.write(new XBeeAtCommand(XBeeFrameIdGenerator.nextFrameID(), "NI"));
+        ctx.write(new XBeeAtCommand(XBeeFrameIdGenerator.nextFrameID(), "SH"));
+        ctx.write(new XBeeAtCommand(XBeeFrameIdGenerator.nextFrameID(), "SL"));
         ctx.write(new XBeeAtCommand(XBeeFrameIdGenerator.nextFrameID(), "DH"));
         ctx.write(new XBeeAtCommand(XBeeFrameIdGenerator.nextFrameID(), "DL"));
         ctx.write(new XBeeAtCommand(XBeeFrameIdGenerator.nextFrameID(), "AP"));
