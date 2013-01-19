@@ -17,7 +17,7 @@
         <module>hello</module>
         <module>modeminfo</module>
         <module>echo</module>
-        <!--<module>cosm</module>-->
+        <module>cosm</module>
     </modules>
 
     <dependencyManagement>

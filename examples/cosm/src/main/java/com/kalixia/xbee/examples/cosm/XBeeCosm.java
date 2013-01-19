@@ -2,34 +2,29 @@ package com.kalixia.xbee.examples.cosm;
 
 import com.beust.jcommander.JCommander;
 import com.beust.jcommander.Parameter;
-import com.kalixia.xbee.api.xbee.RSSI;
-import com.kalixia.xbee.api.xbee.XBeeAddress16;
-import com.kalixia.xbee.api.xbee.XBeeReceive;
-import com.kalixia.xbee.api.xbee.XBeeReceive16;
-import com.kalixia.xbee.examples.cosm.client.Cosm;
-import com.kalixia.xbee.examples.cosm.client.HttpSocketCosm;
-import com.kalixia.xbee.examples.cosm.client.WebSocketCosm;
-import com.kalixia.xbee.handler.codec.xbee.XBeeFrameDelimiterDecoder;
-import com.kalixia.xbee.handler.codec.xbee.XBeePacketDecoder;
-import io.netty.bootstrap.ClientBootstrap;
-import io.netty.channel.Channel;
-import io.netty.channel.ChannelFuture;
-import io.netty.channel.ChannelPipeline;
-import io.netty.channel.ChannelPipelineFactory;
-import io.netty.channel.Channels;
-import io.netty.channel.rxtx.RxtxChannelFactory;
+import com.kalixia.xbee.handler.codec.xbee.XBeeChannelInitializer;
+import io.netty.bootstrap.Bootstrap;
+import io.netty.channel.*;
+import io.netty.channel.rxtx.RxtxChannel;
+import io.netty.channel.rxtx.RxtxChannelOption;
 import io.netty.channel.rxtx.RxtxDeviceAddress;
+import io.netty.channel.socket.nio.NioEventLoopGroup;
+import io.netty.channel.socket.nio.NioSocketChannel;
+import io.netty.channel.socket.oio.OioEventLoopGroup;
+import io.netty.handler.codec.http.*;
+import io.netty.handler.codec.http.websocketx.TextWebSocketFrame;
+import io.netty.handler.codec.http.websocketx.WebSocket13FrameEncoder;
+import io.netty.handler.codec.http.websocketx.WebSocketClientHandshakerFactory;
+import io.netty.handler.codec.http.websocketx.WebSocketVersion;
 import io.netty.logging.InternalLoggerFactory;
 import io.netty.logging.Slf4JLoggerFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
+
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 
 public class XBeeCosm {
     @Parameter(description = "The serial port to use for communication with the XBee module")
@@ -47,6 +42,9 @@ public class XBeeCosm {
     @Parameter(names = {"-api"}, description = "API Key for COSM/Pachube", required = true)
     private String apiKey;
 
+    private CosmClientInboundHandler cosmClientInboundHandler;
+    private Bootstrap cosmBootstrap, rxtxBootstrap;
+
     private static final Logger LOGGER = LoggerFactory.getLogger(XBeeCosm.class);
 
     public void start() throws Exception {
@@ -58,105 +56,118 @@ public class XBeeCosm {
             LOGGER.debug("About to connect to COSM with API key {}", apiKey);
         }
 
-        final ExecutorService executorService = Executors.newCachedThreadPool();
+        try {
+            // configure Cosm client
+            Channel cosmChannel = bootstrapCosm();
 
-//        final Cosm cosm = new WebSocketCosm(apiKey, feedID, datastreamID, executorService);
-        final Cosm cosm = new HttpSocketCosm(apiKey, feedID, datastreamID, executorService);
-        cosm.start();
-
-//        LOGGER.info("Sending fake serial event...");
-//        cosm.getChannel().write(new XBeeReceive16(
-//                new XBeeAddress16(0),
-//                new RSSI(0),
-//                new XBeeReceive.Options((byte) 0),
-//                "25".getBytes("UTF-8")
-//        ));
-
-//        cosm.getChannel().write(new TextWebSocketFrame("{\n" +
-//                "  \"method\" : \"get\",\n" +
-//                "  \"resource\" : \"/feeds/" + feedID + "/datastreams/" + datastreamID + "\",\n" +
-//                "  \"headers\" :\n" +
-//                "    {\n" +
-//                "      \"X-ApiKey\" : \"" + apiKey + "\"\n" +
-//                "    },\n" +
-//                "  \"token\" : \"0xabcdef\"\n" +
-//                "}")).awaitUninterruptibly();
-
-//        cosm.getChannel().write(new TextWebSocketFrame("{\n" +
-//                        "  \"method\" : \"subscribe\",\n" +
-//                        "  \"resource\" : \"/feeds/" + feedID + "/datastreams/" + datastreamID + "\",\n" +
-//                        "  \"headers\" :\n" +
-//                        "    {\n" +
-//                        "      \"X-ApiKey\" : \"" + apiKey + "\"\n" +
-//                        "    },\n" +
-//                        "  \"token\" : \"0xabcdef\"\n" +
-//                        "}")).awaitUninterruptibly();
-
-        // configure the RXTX client
-        RxtxChannelFactory rxtxChannelFactory = new RxtxChannelFactory(executorService);
-        ClientBootstrap rxtxBootstrap = new ClientBootstrap(rxtxChannelFactory);
-
-        // set up the RXTX pipeline factory
-        rxtxBootstrap.setPipelineFactory(new ChannelPipelineFactory() {
-            public ChannelPipeline getPipeline() throws Exception {
-                ChannelPipeline pipeline = Channels.pipeline();
-                pipeline.addLast("xbee-frame-delimiter", new XBeeFrameDelimiterDecoder());
-                pipeline.addLast("xbee-packet-decoder", new XBeePacketDecoder());
-                pipeline.addLast("xbee-cosm-relay", new XBeeCosmRelayHandler(cosm));
-                return pipeline;
-            }
-        });
-        rxtxBootstrap.setOption("baudrate", baudRate);
-
-        // start the connection attempt
-        ChannelFuture rxtxFuture = rxtxBootstrap.connect(new RxtxDeviceAddress(serialPorts.get(0)));
-
-        // wait until the connection is made successfully.
-        Channel serialChannel = rxtxFuture.awaitUninterruptibly().getChannel();
-
-        if (!rxtxFuture.isSuccess()) {
-            System.err.printf("Can't connect to serial port %s (%s)%n", serialPorts.get(0), rxtxFuture.getCause());
-            //rxtxFuture.getCause().printStackTrace();
-            cosm.stop();
-            System.exit(-1);
+            // configure the RXTX client
+            bootstrapRxtx(cosmChannel).closeFuture().sync();
+        } finally {
+            rxtxBootstrap.shutdown();
+            cosmBootstrap.shutdown();
         }
+    }
+
+    private Channel bootstrapCosm() throws InterruptedException, URISyntaxException {
+        URI uri = new URI("ws://api.cosm.com:8080");
+
+        // COSM headers expected
+        HttpHeaders customHeaders = new DefaultHttpHeaders();
+        customHeaders.add("MyHeader", "MyValue");
+
+        cosmClientInboundHandler = new CosmClientInboundHandler(
+                WebSocketClientHandshakerFactory.newHandshaker(uri, WebSocketVersion.V13, null, false, customHeaders));
+
+        cosmBootstrap = new Bootstrap();
+        cosmBootstrap.group(new NioEventLoopGroup())
+                .channel(NioSocketChannel.class)
+                .remoteAddress(uri.getHost(), uri.getPort())
+                .handler(new CosmChannelInitializer());
+        LOGGER.info("COSM client connecting...");
+        Channel ch = cosmBootstrap.connect().sync().channel();
+        cosmClientInboundHandler.handshakeFuture().sync();
+
+        return ch;
+    }
+
+    private Channel bootstrapRxtx(Channel cosmChannel) throws InterruptedException {
+        rxtxBootstrap = new Bootstrap();
+        rxtxBootstrap.group(new OioEventLoopGroup())
+                .channel(RxtxChannel.class)
+                .remoteAddress(new RxtxDeviceAddress(serialPorts.get(0)))
+                .option(RxtxChannelOption.BAUD_RATE, baudRate)
+                .handler(new RxtxChannelInitializer(cosmChannel));
         LOGGER.info("Listening for serial data on {} at {} bauds...", serialPorts.get(0), baudRate);
+        return rxtxBootstrap.connect().sync().channel();
+    }
 
-        BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
+    public class CosmChannelInitializer extends ChannelInitializer<NioSocketChannel> {
+        @Override
+        public void initChannel(NioSocketChannel ch) throws Exception {
+            ChannelPipeline pipeline = ch.pipeline();
+            pipeline.addLast("http-response-decoder", new HttpResponseDecoder());
+            pipeline.addLast("http-request-encoder", new HttpRequestEncoder());
+            pipeline.addLast("http-aggregator", new HttpObjectAggregator(8192));
+            pipeline.addLast("cosm-client-inbound-handler", cosmClientInboundHandler);
+        }
+    }
 
-        boolean exit = false;
-        while (!exit) {
-            try {
-                String line = reader.readLine();
-                if ("exit".equals(line)) {
-                    exit = true;
-                }
-            } catch (IOException e) {
-                // ignore
-            }
+    public class RxtxChannelInitializer extends XBeeChannelInitializer {
+        private final Channel cosmChannel;
+
+        public RxtxChannelInitializer(Channel cosmChannel) {
+            this.cosmChannel = cosmChannel;
         }
 
-        // Close the connection.
-        cosm.stop();
-        serialChannel.close().awaitUninterruptibly();
-
-        // Shut down all thread pools to exit.
-        rxtxBootstrap.releaseExternalResources();
+        @Override
+        public void initChannel(RxtxChannel ch) throws Exception {
+            super.initChannel(ch);
+//            ch.pipeline().addLast("cosm-encoder", new CosmEncoder());
+            ch.pipeline().addLast(new ChannelInboundMessageHandlerAdapter<Object>() {
+                @Override
+                public void channelActive(ChannelHandlerContext ctx) throws Exception {
+                    for (int i = 0; i < 10; i++) {
+                        String value = ((Double) (Math.random() * 100)).toString();
+                        cosmChannel.write(new TextWebSocketFrame("{\n" +
+                                "  \"method\" : \"put\",\n" +
+                                "  \"resource\" : \"/feeds/98803\",\n" +
+                                "  \"params\" : {},\n" +
+                                "  \"headers\" : {\"X-ApiKey\":\"" + apiKey + "\"},\n" +
+                                "  \"body\" :\n" +
+                                "    {\n" +
+                                "      \"version\" : \"1.0.0\",\n" +
+                                "      \"datastreams\" : [\n" +
+                                "        {\n" +
+                                "          \"id\" : \"0\",\n" +
+                                "          \"current_value\" : \"" + value + "\"\n" +
+                                "        }\n" +
+                                "      ]\n" +
+                                "    },\n" +
+                                "  \"token\" : \"0x12345\"\n" +
+                                "}\n"));
+                        Thread.sleep(5000);
+                    }
+                }
+                @Override
+                protected void messageReceived(ChannelHandlerContext ctx, Object msg) throws Exception {
+                }
+            });
+        }
     }
 
     public static void main(String[] args) throws Exception {
-        XBeeCosm sniffer = new XBeeCosm();
-        JCommander commander = new JCommander(sniffer, args);
+        XBeeCosm cosm = new XBeeCosm();
+        JCommander commander = new JCommander(cosm, args);
         commander.setProgramName("xbee-cosm");
 
-        if (sniffer.serialPorts.size() == 0) {
+        if (cosm.serialPorts.size() == 0) {
             commander.usage();
             return;
         }
 
-        System.setProperty("gnu.io.rxtx.SerialPorts", sniffer.serialPorts.get(0));
+        System.setProperty("gnu.io.rxtx.SerialPorts", cosm.serialPorts.get(0));
 
-        sniffer.start();
+        cosm.start();
     }
 
 }
