@@ -23,21 +23,5 @@ public class XBeeChannelInitializer extends ChannelInitializer<RxtxChannel> {
 
         pipeline.addLast("xbee-frame-decoder", new XBeeFrameDelimiterDecoder());
         pipeline.addLast("xbee-packet-decoder", new XBeePacketDecoder(1));
-
-//        pipeline.addLast(new MessageToByteEncoder<XBeeRequest>() {
-//            @Override
-//            protected void encode(ChannelHandlerContext ctx, XBeeRequest msg, ByteBuf out) throws Exception {
-//                LoggerFactory.getLogger(XBeeChannelInitializer.class).info("par ici");
-//                out.writeByte('h');
-//            }
-//        });
-//        pipeline.addLast(new ChannelInboundMessageHandlerAdapter<XBeeRequest>() {
-//            @Override
-//            protected void messageReceived(ChannelHandlerContext ctx, XBeeRequest request) throws Exception {
-//                LoggerFactory.getLogger(XBeeChannelInitializer.class).info("Received request {}", request);
-//            }
-//        });
-
-//        pipeline.addLast(new ByteLoggingHandler());
     }
 }

@@ -12,8 +12,6 @@ import io.netty.channel.socket.nio.NioEventLoopGroup;
 import io.netty.channel.socket.nio.NioSocketChannel;
 import io.netty.channel.socket.oio.OioEventLoopGroup;
 import io.netty.handler.codec.http.*;
-import io.netty.handler.codec.http.websocketx.TextWebSocketFrame;
-import io.netty.handler.codec.http.websocketx.WebSocket13FrameEncoder;
 import io.netty.handler.codec.http.websocketx.WebSocketClientHandshakerFactory;
 import io.netty.handler.codec.http.websocketx.WebSocketVersion;
 import io.netty.logging.InternalLoggerFactory;
@@ -71,12 +69,8 @@ public class XBeeCosm {
     private Channel bootstrapCosm() throws InterruptedException, URISyntaxException {
         URI uri = new URI("ws://api.cosm.com:8080");
 
-        // COSM headers expected
-        HttpHeaders customHeaders = new DefaultHttpHeaders();
-        customHeaders.add("MyHeader", "MyValue");
-
         cosmClientInboundHandler = new CosmClientInboundHandler(
-                WebSocketClientHandshakerFactory.newHandshaker(uri, WebSocketVersion.V13, null, false, customHeaders));
+                WebSocketClientHandshakerFactory.newHandshaker(uri, WebSocketVersion.V13, null, false, null));
 
         cosmBootstrap = new Bootstrap();
         cosmBootstrap.group(new NioEventLoopGroup())
@@ -122,37 +116,10 @@ public class XBeeCosm {
         @Override
         public void initChannel(RxtxChannel ch) throws Exception {
             super.initChannel(ch);
-//            ch.pipeline().addLast("cosm-encoder", new CosmEncoder());
-            ch.pipeline().addLast(new ChannelInboundMessageHandlerAdapter<Object>() {
-                @Override
-                public void channelActive(ChannelHandlerContext ctx) throws Exception {
-                    for (int i = 0; i < 10; i++) {
-                        String value = ((Double) (Math.random() * 100)).toString();
-                        cosmChannel.write(new TextWebSocketFrame("{\n" +
-                                "  \"method\" : \"put\",\n" +
-                                "  \"resource\" : \"/feeds/98803\",\n" +
-                                "  \"params\" : {},\n" +
-                                "  \"headers\" : {\"X-ApiKey\":\"" + apiKey + "\"},\n" +
-                                "  \"body\" :\n" +
-                                "    {\n" +
-                                "      \"version\" : \"1.0.0\",\n" +
-                                "      \"datastreams\" : [\n" +
-                                "        {\n" +
-                                "          \"id\" : \"0\",\n" +
-                                "          \"current_value\" : \"" + value + "\"\n" +
-                                "        }\n" +
-                                "      ]\n" +
-                                "    },\n" +
-                                "  \"token\" : \"0x12345\"\n" +
-                                "}\n"));
-                        Thread.sleep(5000);
-                    }
-                }
-                @Override
-                protected void messageReceived(ChannelHandlerContext ctx, Object msg) throws Exception {
-                }
-            });
+            ch.pipeline().addLast("xbee-request-to-cosm",
+                    new XBeeRequestToCosmHandler(cosmChannel, apiKey, feedID, datastreamID));
         }
+
     }
 
     public static void main(String[] args) throws Exception {
