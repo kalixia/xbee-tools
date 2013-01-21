@@ -1,4 +1,4 @@
-package com.kalixia.xbee.examples.cosm;
+package com.kalixia.xbee.examples.cosm.websockets;
 
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelFuture;
@@ -15,7 +15,7 @@ import io.netty.util.CharsetUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class CosmClientInboundHandler extends ChannelInboundMessageHandlerAdapter<Object> {
+class CosmClientInboundHandler extends ChannelInboundMessageHandlerAdapter<Object> {
     private final WebSocketClientHandshaker handshaker;
     private ChannelPromise handshakeFuture;
     private static final Logger LOGGER = LoggerFactory.getLogger(CosmClientInboundHandler.class);
