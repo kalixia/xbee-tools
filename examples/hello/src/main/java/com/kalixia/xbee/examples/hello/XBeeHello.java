@@ -16,8 +16,6 @@ import io.netty.handler.codec.LineBasedFrameDecoder;
 import io.netty.handler.codec.string.StringDecoder;
 import io.netty.handler.logging.ByteLoggingHandler;
 import io.netty.handler.logging.LogLevel;
-import io.netty.logging.InternalLoggerFactory;
-import io.netty.logging.Slf4JLoggerFactory;
 import io.netty.util.CharsetUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -40,9 +38,6 @@ public class XBeeHello {
     private static final Logger LOGGER = LoggerFactory.getLogger(XBeeHello.class);
 
     public void hello() throws InterruptedException {
-        // Configure Netty logging
-        InternalLoggerFactory.setDefaultFactory(new Slf4JLoggerFactory());
-
         // Configure the client
         Bootstrap b = new Bootstrap();
         try {

@@ -18,8 +18,6 @@ import io.netty.handler.codec.http.HttpRequestEncoder;
 import io.netty.handler.codec.http.HttpResponseDecoder;
 import io.netty.handler.codec.http.websocketx.WebSocketClientHandshakerFactory;
 import io.netty.handler.codec.http.websocketx.WebSocketVersion;
-import io.netty.logging.InternalLoggerFactory;
-import io.netty.logging.Slf4JLoggerFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -50,9 +48,6 @@ public class XBeeCosm {
     private static final Logger LOGGER = LoggerFactory.getLogger(XBeeCosm.class);
 
     public void start() throws Exception {
-        // configure Netty logging
-        InternalLoggerFactory.setDefaultFactory(new Slf4JLoggerFactory());
-
         // show debug info
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("About to connect to COSM with API key {}", apiKey);

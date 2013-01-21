@@ -13,8 +13,6 @@ import io.netty.channel.rxtx.RxtxChannel;
 import io.netty.channel.rxtx.RxtxChannelOption;
 import io.netty.channel.rxtx.RxtxDeviceAddress;
 import io.netty.channel.socket.oio.OioEventLoopGroup;
-import io.netty.logging.InternalLoggerFactory;
-import io.netty.logging.Slf4JLoggerFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -31,9 +29,6 @@ public class XBeeEcho {
     private static final Logger LOGGER = LoggerFactory.getLogger(XBeeEcho.class);
 
     public void echo() throws InterruptedException {
-        // Configure Netty logging
-        InternalLoggerFactory.setDefaultFactory(new Slf4JLoggerFactory());
-
         // Configure the client
         Bootstrap b = new Bootstrap();
         try {

@@ -10,8 +10,6 @@ import io.netty.channel.rxtx.RxtxChannel;
 import io.netty.channel.rxtx.RxtxChannelOption;
 import io.netty.channel.rxtx.RxtxDeviceAddress;
 import io.netty.channel.socket.oio.OioEventLoopGroup;
-import io.netty.logging.InternalLoggerFactory;
-import io.netty.logging.Slf4JLoggerFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -24,11 +22,6 @@ class XBeeImpl implements XBee {
     private Channel channel;
     private static final long TIMEOUT = 5 * 1000;        // 5 seconds
     private static final Logger LOGGER = LoggerFactory.getLogger(XBee.class);
-
-    static {
-        // Configure Netty logging
-        InternalLoggerFactory.setDefaultFactory(new Slf4JLoggerFactory());
-    }
 
     @Override
     public XBee begin(String serialPort, int bauds) throws InterruptedException {
