@@ -114,7 +114,7 @@ class XBeeImpl implements XBee {
             Thread.sleep(100);
         channel.pipeline().remove("modem-info");
 
-        LOGGER.info("Modem info is {}", modemInfo);
+//        LOGGER.info("Modem info is {}", modemInfo);
         return modemInfo;
     }
 
