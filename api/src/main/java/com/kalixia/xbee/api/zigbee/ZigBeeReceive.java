@@ -1,6 +1,10 @@
 package com.kalixia.xbee.api.zigbee;
 
-import com.kalixia.xbee.api.xbee.*;
+import com.kalixia.xbee.api.xbee.RSSI;
+import com.kalixia.xbee.api.xbee.XBeeAddress;
+import com.kalixia.xbee.api.xbee.XBeeAddress16;
+import com.kalixia.xbee.api.xbee.XBeeAddress64;
+import com.kalixia.xbee.api.xbee.XBeeReceive;
 import io.netty.buffer.ByteBuf;
 
 public class ZigBeeReceive implements ZigBeeRequest, XBeeReceive {

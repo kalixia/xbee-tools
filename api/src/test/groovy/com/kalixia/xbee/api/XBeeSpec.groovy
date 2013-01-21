@@ -1,9 +1,6 @@
 package com.kalixia.xbee.api
 
-import com.kalixia.xbee.api.xbee.XBee
 import spock.lang.Specification
-
-import java.util.concurrent.TimeUnit
 
 class XBeeSpec extends Specification {
 

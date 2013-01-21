@@ -1,6 +1,7 @@
 package com.kalixia.xbee.api.xbee;
 
 import com.kalixia.xbee.utils.BitSetUtils;
+
 import java.io.Serializable;
 import java.util.BitSet;
 

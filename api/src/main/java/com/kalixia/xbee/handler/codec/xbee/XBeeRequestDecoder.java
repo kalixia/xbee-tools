@@ -6,8 +6,6 @@ import io.netty.handler.codec.MessageToMessageEncoder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.net.ConnectException;
-
 public class XBeeRequestDecoder extends MessageToMessageEncoder<XBeeRequest> {
     private static final Logger LOGGER = LoggerFactory.getLogger(XBeeRequestDecoder.class);
 

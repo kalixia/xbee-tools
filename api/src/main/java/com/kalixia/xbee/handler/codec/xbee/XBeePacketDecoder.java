@@ -1,7 +1,16 @@
 package com.kalixia.xbee.handler.codec.xbee;
 
-import com.kalixia.xbee.api.xbee.*;
-import com.kalixia.xbee.api.zigbee.ZigBeeReceive;import io.netty.buffer.ByteBuf;
+import com.kalixia.xbee.api.xbee.RSSI;
+import com.kalixia.xbee.api.xbee.XBeeAddress16;
+import com.kalixia.xbee.api.xbee.XBeeAddress64;
+import com.kalixia.xbee.api.xbee.XBeeAtCommandResponse;
+import com.kalixia.xbee.api.xbee.XBeeModemStatus;
+import com.kalixia.xbee.api.xbee.XBeeReceive;
+import com.kalixia.xbee.api.xbee.XBeeReceive16;
+import com.kalixia.xbee.api.xbee.XBeeReceive64;
+import com.kalixia.xbee.api.xbee.XBeeTransmitStatus;
+import com.kalixia.xbee.api.zigbee.ZigBeeReceive;
+import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.handler.codec.MessageToMessageDecoder;

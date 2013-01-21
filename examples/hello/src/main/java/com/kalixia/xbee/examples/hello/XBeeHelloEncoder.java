@@ -1,9 +1,9 @@
 package com.kalixia.xbee.examples.hello;
 
 import com.kalixia.xbee.api.xbee.XBeeAddress16;
-import com.kalixia.xbee.utils.XBeeFrameIdGenerator;
 import com.kalixia.xbee.api.xbee.XBeeTransmit;
 import com.kalixia.xbee.api.xbee.XBeeTransmit16;
+import com.kalixia.xbee.utils.XBeeFrameIdGenerator;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.handler.codec.MessageToMessageEncoder;
 import org.slf4j.Logger;

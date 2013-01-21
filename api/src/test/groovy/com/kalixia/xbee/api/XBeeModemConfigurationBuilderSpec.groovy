@@ -1,9 +1,9 @@
 package com.kalixia.xbee.api
 
-import spock.lang.Specification
 import com.kalixia.xbee.api.xbee.XBeeAddress16
-import com.kalixia.xbee.api.xbee.XBeeModemConfigurationBuilder
 import com.kalixia.xbee.api.xbee.XBeeModemConfiguration
+import com.kalixia.xbee.api.xbee.XBeeModemConfigurationBuilder
+import spock.lang.Specification
 
 class XBeeModemConfigurationBuilderSpec extends Specification {
     def "simple XBee Modem configuration"() {

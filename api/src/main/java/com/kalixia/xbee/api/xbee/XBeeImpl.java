@@ -1,21 +1,15 @@
 package com.kalixia.xbee.api.xbee;
 
-import com.kalixia.xbee.handler.codec.xbee.*;
+import com.kalixia.xbee.handler.codec.xbee.XBeeChannelInitializer;
 import com.kalixia.xbee.utils.XBeeFrameIdGenerator;
 import io.netty.bootstrap.Bootstrap;
-import io.netty.bootstrap.ServerBootstrap;
-import io.netty.channel.*;
-import io.netty.channel.local.LocalAddress;
-import io.netty.channel.local.LocalChannel;
-import io.netty.channel.local.LocalEventLoopGroup;
-import io.netty.channel.local.LocalServerChannel;
+import io.netty.channel.Channel;
+import io.netty.channel.ChannelFuture;
+import io.netty.channel.ChannelFutureListener;
 import io.netty.channel.rxtx.RxtxChannel;
 import io.netty.channel.rxtx.RxtxChannelOption;
 import io.netty.channel.rxtx.RxtxDeviceAddress;
-import io.netty.channel.socket.nio.NioEventLoopGroup;
 import io.netty.channel.socket.oio.OioEventLoopGroup;
-import io.netty.handler.logging.LogLevel;
-import io.netty.handler.logging.LoggingHandler;
 import io.netty.logging.InternalLoggerFactory;
 import io.netty.logging.Slf4JLoggerFactory;
 import org.slf4j.Logger;
