@@ -52,7 +52,8 @@
                 <configuration>
                     <message>Creating site for ${project.artifactId}, ${project.version}</message>
                     <!--this does the trick to place every module in the correct subfolder-->
-                    <path>${project.distributionManagement.site.url}</path>
+                    <!--<path>${project.distributionManagement.site.url}</path>-->
+                    <path>${project.version}</path>
                     <merge>true</merge>
                 </configuration>
                 <executions>
