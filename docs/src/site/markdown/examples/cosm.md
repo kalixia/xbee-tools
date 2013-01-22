@@ -10,12 +10,12 @@ The WebSockets is a nice way to do this, but proves to be quite unstable on COSM
 
 ## How to run
 
-First make sure you've [built the project](../installation.html).
-Next, if you have a look at the ``` examples/cosm/target/appassembler ``` directory, you'll find a complete
+First make sure you have [built the project](../installation.html).
+Next, if you have a look at the ``` examples/cosm/target/appassembler ``` directory, you will find a complete
 *distribution* of the example.
 
 Depending on your OS you either need to run ``` sh bin/xbee-cosm ``` or ``` bin\xbee-cosm.bat ```.
-Don't forget to read the next section as there are some required CLI parameters for this example to work.
+Do not forget to read the next section as there are some required CLI parameters for this example to work.
 
 
 ## Settings

@@ -20,7 +20,7 @@
             </brand>
             <!--<slogan>Super interesting project doing good things.</slogan>-->
             <titleTemplate>%2$s | %1$s</titleTemplate>
-            <!--<toc>sidebar</toc>-->
+            <toc>sidebar</toc>
             <!--<topNav>Download|reports</topNav>-->
             <!--<tocTopFlatten>true</tocTopFlatten>-->
             <breadcrumbs>true|false</breadcrumbs>
@@ -44,12 +44,12 @@
                         <body />
                     </sections>
                 </index>
-                <installation>
-                    <toc>sidebar</toc>
-                </installation>
-                <examples-cosm>
-                    <toc>sidebar</toc>
-                </examples-cosm>
+                <!--<installation>-->
+                    <!--<toc>sidebar</toc>-->
+                <!--</installation>-->
+                <!--<examples-cosm>-->
+                    <!--<toc>sidebar</toc>-->
+                <!--</examples-cosm>-->
             </pages>
         </reflowSkin>
     </custom>

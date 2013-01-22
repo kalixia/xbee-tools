@@ -90,7 +90,7 @@ public class XBeeHello {
             System.err.println(e.getMessage());
             System.exit(-1);
         }
-        commander.setProgramName("hello");
+        commander.setProgramName("xbee-hello");
 
         if (hello.serialPorts.size() == 0) {
             commander.usage();

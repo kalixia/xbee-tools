@@ -35,12 +35,8 @@
                 <configuration>
                     <programs>
                         <program>
-                            <mainClass>com.kalixia.xbee.tools.recorder.XBeeRecorder</mainClass>
-                            <name>xbee-recorder</name>
-                        </program>
-                        <program>
-                            <mainClass>com.kalixia.xbee.tools.recorder.XBeeReplayer</mainClass>
-                            <name>xbee-replayer</name>
+                            <mainClass>com.kalixia.xbee.examples.hello.XBeeHello</mainClass>
+                            <name>xbee-hello</name>
                         </program>
                     </programs>
                     <repositoryLayout>flat</repositoryLayout>

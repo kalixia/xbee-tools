@@ -64,7 +64,7 @@ public class XBeeEcho {
             System.err.println(e.getMessage());
             System.exit(-1);
         }
-        commander.setProgramName("echo");
+        commander.setProgramName("xbee-echo");
 
         if (echo.serialPorts.size() == 0) {
             commander.usage();
