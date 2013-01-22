@@ -16,7 +16,7 @@
             <highlightJs>true</highlightJs>
             <brand>
                 <name>XBee Tools</name>
-                <href>https://github.com/kalixia/xbee-tools</href>
+                <href>http://xbee-tools.kalixia.com</href>
             </brand>
             <!--<slogan>Super interesting project doing good things.</slogan>-->
             <titleTemplate>%2$s | %1$s</titleTemplate>
@@ -25,30 +25,28 @@
             <!--<tocTopFlatten>true</tocTopFlatten>-->
             <breadcrumbs>true|false</breadcrumbs>
             <bottomNav>
-                <!--<column>Main|Download</column>-->
-                <!--<column>Documentation</column>-->
-                <!--<column>reports|modules</column>-->
                 <column>API</column>
                 <column>Tools</column>
                 <column>Examples</column>
             </bottomNav>
-            <bottomDescription>
-                This is a very good project doing interesting and valuable things.
-            </bottomDescription>
+            <!--<bottomDescription>-->
+                <!--This is a very good project doing interesting and valuable things.-->
+            <!--</bottomDescription>-->
             <skinAttribution>false</skinAttribution>
             <pages>
                 <index>
-                    <!--<shortTitle>Welcome</shortTitle>-->
+                    <shortTitle>Welcome</shortTitle>
                     <breadcrumbs>false</breadcrumbs>
                     <toc>false</toc>
-                    <!--<sections>-->
-                        <!--<carousel />-->
-                        <!--<body />-->
-                        <!--<sidebar />-->
-                        <!--<thumbs>2</thumbs>-->
-                        <!--<columns>3</columns>-->
-                    <!--</sections>-->
+                    <sections>
+                        <body />
+                        <sidebar />
+                        <body />
+                    </sections>
                 </index>
+                <installation>
+                    <toc>sidebar</toc>
+                </installation>
                 <examples-cosm>
                     <toc>sidebar</toc>
                 </examples-cosm>
@@ -68,8 +66,9 @@
             <!--<item name="Release notes" href="changes-report.html" />-->
         <!--</links>-->
 
-        <menu name="Documentation" inherit="top">
+        <menu name="API" inherit="top">
             <item name="Home" href="./index.html"/>
+            <item name="Installation" href="./installation.html"/>
             <!--<item name="Examples" href="./examples/index.html"/>-->
             <!--<item name="GitHub project" href="https://github.com/kalixia/xbee-tools/" />-->
             <!--<item name="Setup" href="./setup.html"/>-->

@@ -53,7 +53,6 @@
                     <message>Creating site for ${project.artifactId}, ${project.version}</message>
                     <!--this does the trick to place every module in the correct subfolder-->
                     <!--<path>${project.distributionManagement.site.url}</path>-->
-                    <path>${project.version}</path>
                     <merge>true</merge>
                 </configuration>
                 <executions>
@@ -110,35 +109,5 @@
             </plugin>
         </plugins>
     </reporting>
-
-    <profiles>
-        <profile>
-            <id>stage</id>
-            <properties>
-                <site.deploy.url>http://github.com/kalixia/xbee-tools</site.deploy.url>
-            </properties>
-
-            <build>
-                <plugins>
-                    <!-- Configure Maven site plugin to perform stage -->
-                    <plugin>
-                        <groupId>org.apache.maven.plugins</groupId>
-                        <artifactId>maven-site-plugin</artifactId>
-                        <version>3.2</version>
-                        <executions>
-                            <execution>
-                                <id>stage</id>
-                                <goals>
-                                    <goal>stage</goal>
-                                </goals>
-                                <phase>site</phase>
-                            </execution>
-                        </executions>
-                    </plugin>
-                </plugins>
-            </build>
-
-        </profile>
-    </profiles>
 
 </project>
