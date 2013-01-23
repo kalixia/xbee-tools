@@ -14,6 +14,7 @@
         <reflowSkin>
             <theme>bootswatch-united</theme>
             <highlightJs>true</highlightJs>
+            <highlightJsTheme>tomorrow</highlightJsTheme>
             <brand>
                 <name>XBee Tools</name>
                 <href>http://xbee-tools.kalixia.com</href>
