@@ -8,17 +8,14 @@ It is actually provided with two different strategies: either using COSM
 [WebSockets API](https://cosm.com/docs/beta/socket_server/) or using the [HTTP API](https://cosm.com/docs/v2/).
 The WebSockets is a nice way to do this, but proves to be quite unstable on COSM side, hence the provided HTTP version.
 
-## How to run
+## Build
 
 First make sure you have [built the project](../installation.html).
 Next, if you have a look at the ``` examples/cosm/target/appassembler ``` directory, you will find a complete
 *distribution* of the example.
 
-Depending on your OS you either need to run ``` sh bin/xbee-cosm ``` or ``` bin\xbee-cosm.bat ```.
-Do not forget to read the next section as there are some required CLI parameters for this example to work.
 
-
-## Settings
+## Configure
 
 A few settings are required in order to get the gateway to run properly.
 If you launch ``` xbee-cosm ``` with no arguments, the usage will be displayed.
@@ -35,8 +32,16 @@ Here is below a list of the parameters:
 | *serial port* | Serial port to use: one Windows something like COM3, on Unix machines something like ``` /dev/tty.usbmodem123 ```
 
 
+## Run
+
+Depending on your OS you either need to run ``` sh bin/xbee-cosm ``` or ``` bin\xbee-cosm.bat ```.
+Do not forget to read the next section as there are some required CLI parameters for this example to work.
+
+If the WebSockets API does not work, use instead of HTTP API.
+
+
 ## Suggestions
 
-Thinks twice about how often you need to push data from a sensor to this COSM gateway.
+Thinks twice about how often you need to push data from a sensor to this [COSM](http://www.cosm.com) gateway.
 
 For example sending temperature every 5 seconds does not make sense most of the time.
