@@ -55,7 +55,7 @@ class CosmClientInboundHandler extends ChannelInboundMessageHandlerAdapter<Objec
 
         if (msg instanceof FullHttpResponse) {
             FullHttpResponse response = (FullHttpResponse) msg;
-            throw new Exception("Unexpected FullHttpResponse (status=" + response.status() + ", content="
+            throw new Exception("Unexpected FullHttpResponse (status=" + response.getStatus() + ", content="
                     + response.data().toString(CharsetUtil.UTF_8) + ')');
         }
 
