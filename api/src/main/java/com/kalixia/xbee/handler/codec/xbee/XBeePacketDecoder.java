@@ -28,7 +28,7 @@ public class XBeePacketDecoder extends MessageToMessageDecoder<XBeePacket> {
     private static final Logger LOGGER = LoggerFactory.getLogger(XBeePacketDecoder.class);
 
     public XBeePacketDecoder(int apVersion) {
-        super(XBeePacket.class);
+        super();
         if (apVersion != 1)
             throw new IllegalArgumentException("The only API mode supported is the AP 1 yet");
         this.apVersion = apVersion;

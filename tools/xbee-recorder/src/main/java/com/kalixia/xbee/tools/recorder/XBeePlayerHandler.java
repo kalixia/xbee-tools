@@ -1,5 +1,6 @@
 package com.kalixia.xbee.tools.recorder;
 
+import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelOutboundMessageHandlerAdapter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -19,6 +20,11 @@ public class XBeePlayerHandler extends ChannelOutboundMessageHandlerAdapter<Obje
     public XBeePlayerHandler(String name) throws IOException {
         fis = new FileInputStream(new File(name));
         ois = new ObjectInputStream(fis);
+    }
+
+    @Override
+    protected void flush(ChannelHandlerContext ctx, Object msg) throws Exception {
+        // do nothing
     }
 
 //    public void writeRequested(ChannelHandlerContext ctx, Object obj) throws Exception {

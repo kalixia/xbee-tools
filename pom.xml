@@ -47,6 +47,33 @@
 
     <dependencyManagement>
         <dependencies>
+            <!-- Netty dependencies -->
+            <dependency>
+                <groupId>io.netty</groupId>
+                <artifactId>netty-handler</artifactId>
+                <version>${netty.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>io.netty</groupId>
+                <artifactId>netty-codec</artifactId>
+                <version>${netty.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>io.netty</groupId>
+                <artifactId>netty-codec-http</artifactId>
+                <version>${netty.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>io.netty</groupId>
+                <artifactId>netty-transport-rxtx</artifactId>
+                <version>${netty.version}</version>
+            </dependency>
+            <!--<dependency>-->
+                <!--<groupId>io.netty</groupId>-->
+                <!--<artifactId>netty-metrics-yammer</artifactId>-->
+                <!--<version>${netty.version}</version>-->
+            <!--</dependency>-->
+
             <dependency>
                 <groupId>org.spockframework</groupId>
                 <artifactId>spock-core</artifactId>
@@ -155,7 +182,7 @@
     </build>
 
     <properties>
-        <netty.version>4.0.0.Beta1-SNAPSHOT</netty.version>
+        <netty.version>4.0.0.Beta2</netty.version>
     </properties>
     
 </project>

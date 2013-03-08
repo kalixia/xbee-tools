@@ -18,23 +18,19 @@
         <dependency>
             <groupId>io.netty</groupId>
             <artifactId>netty-handler</artifactId>
-            <version>${netty.version}</version>
         </dependency>
         <dependency>
             <groupId>io.netty</groupId>
             <artifactId>netty-codec</artifactId>
-            <version>${netty.version}</version>
         </dependency>
         <dependency>
             <groupId>io.netty</groupId>
             <artifactId>netty-transport-rxtx</artifactId>
-            <version>${netty.version}</version>
         </dependency>
-        <dependency>
-            <groupId>io.netty</groupId>
-            <artifactId>netty-metrics-yammer</artifactId>
-            <version>${netty.version}</version>
-        </dependency>
+        <!--<dependency>-->
+            <!--<groupId>io.netty</groupId>-->
+            <!--<artifactId>netty-metrics-yammer</artifactId>-->
+        <!--</dependency>-->
 
         <dependency>
             <groupId>ch.qos.logback</groupId>
@@ -48,10 +44,6 @@
             <artifactId>spock-core</artifactId>
         </dependency>
     </dependencies>
-
-    <properties>
-        <netty.version>4.0.0.Beta1-SNAPSHOT</netty.version>
-    </properties>
 
     <build>
         <plugins>

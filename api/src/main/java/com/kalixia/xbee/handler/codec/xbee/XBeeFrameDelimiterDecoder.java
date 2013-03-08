@@ -1,7 +1,7 @@
 package com.kalixia.xbee.handler.codec.xbee;
 
+import io.netty.buffer.BufUtil;
 import io.netty.buffer.ByteBuf;
-import io.netty.buffer.ByteBufUtil;
 import io.netty.buffer.Unpooled;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.handler.codec.ByteToMessageDecoder;
@@ -68,7 +68,7 @@ public class XBeeFrameDelimiterDecoder extends ByteToMessageDecoder {
             LOGGER.debug("Frame size is {}. API Identifier is: {}. Checksum is: {}", new Object[]{
                     length,
                     packet.getApiIdentifier().name(),
-                    "0x" + ByteBufUtil.hexDump(Unpooled.wrappedBuffer(new byte[]{packet.getChecksum()}))
+                    "0x" + BufUtil.hexDump(Unpooled.wrappedBuffer(new byte[]{packet.getChecksum()}))
             });
             LOGGER.debug("Frame content is: {}", packet.getData());
         }
