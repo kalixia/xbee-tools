@@ -4,11 +4,11 @@ import com.kalixia.xbee.api.xbee.XBeeAtCommand;
 import com.kalixia.xbee.api.xbee.XBeeAtCommandResponse;
 import com.kalixia.xbee.utils.XBeeFrameIdGenerator;
 import io.netty.channel.ChannelHandlerContext;
-import io.netty.channel.ChannelInboundMessageHandlerAdapter;
+import io.netty.channel.ChannelInboundHandlerAdapter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class XBeeModemInfoDecoder extends ChannelInboundMessageHandlerAdapter<XBeeAtCommandResponse> {
+public class XBeeModemInfoDecoder extends ChannelInboundHandlerAdapter {
     private static final Logger LOGGER = LoggerFactory.getLogger(XBeeModemInfoDecoder.class);
 
     @Override
@@ -36,7 +36,9 @@ public class XBeeModemInfoDecoder extends ChannelInboundMessageHandlerAdapter<XB
     }
 
     @Override
-    protected void messageReceived(ChannelHandlerContext ctx, XBeeAtCommandResponse response) throws Exception {
+    public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception {
+        XBeeAtCommandResponse response = (XBeeAtCommandResponse) msg;
         LOGGER.info("Received {}", response);
     }
+
 }

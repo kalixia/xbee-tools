@@ -15,6 +15,7 @@ import org.slf4j.LoggerFactory;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
 
 /**
  * Encodes {@link com.kalixia.xbee.examples.cosm.XBeeData} objects into expected COSM {@link HttpRequest} in order to update a datastream.
@@ -24,7 +25,7 @@ public class XBeeCosmClientMessageEncoder extends MessageToMessageEncoder<XBeeDa
     private static final Logger LOGGER = LoggerFactory.getLogger(XBeeCosmClientMessageEncoder.class);
 
     @Override
-    protected Object encode(ChannelHandlerContext ctx, XBeeData msg) throws Exception {
+    protected void encode(ChannelHandlerContext ctx, XBeeData msg, List<Object> out) throws Exception {
         String uri = String.format("/v2/feeds/%d/datastreams/%d/datapoints",
                 msg.getFeedID(), msg.getDatastreamID());
         String data = String.format("{\n" +
@@ -42,7 +43,7 @@ public class XBeeCosmClientMessageEncoder extends MessageToMessageEncoder<XBeeDa
         request.headers().set(HttpHeaders.Names.CONTENT_TYPE, "application/json");
         request.headers().set(HttpHeaders.Names.CONTENT_LENGTH, contentLength);
         LOGGER.debug("About to send COSM request {}\n\t with content {}", request, data);
-        return request;
+        out.add(request);
     }
 
     @Override

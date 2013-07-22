@@ -17,6 +17,8 @@ import io.netty.handler.codec.MessageToMessageDecoder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.List;
+
 /**
  * Decoder which creates the appropriate API object.
  * Expect the input to be a {@link XBeePacket}, hence is usually preceded with the {@link XBeeFrameDelimiterDecoder}.
@@ -35,13 +37,13 @@ public class XBeePacketDecoder extends MessageToMessageDecoder<XBeePacket> {
     }
 
     @Override
-    protected Object decode(ChannelHandlerContext ctx, XBeePacket packet) throws Exception {
+    protected void decode(ChannelHandlerContext ctx, XBeePacket packet, List<Object> out) throws Exception {
         ByteBuf data = Unpooled.wrappedBuffer(packet.getData());
 
         switch (packet.getApiIdentifier()) {
             case MODEM_STATUS: {
                 byte status = data.readByte();
-                return XBeeModemStatus.valueOf(status);
+                out.add(XBeeModemStatus.valueOf(status));
             }
             case RX_PACKET_16: {
                 XBeeAddress16 source = new XBeeAddress16(data.readShort());
@@ -49,7 +51,7 @@ public class XBeePacketDecoder extends MessageToMessageDecoder<XBeePacket> {
                 XBeeReceive.Options options = new XBeeReceive.Options(data.readByte());
                 byte appData[] = new byte[data.readableBytes()];
                 data.readBytes(appData);
-                return new XBeeReceive16(source, rssi, options, appData);
+                out.add(new XBeeReceive16(source, rssi, options, appData));
             }
             case RX_PACKET_64: {
                 XBeeAddress64 source = new XBeeAddress64(data.readLong());
@@ -57,7 +59,7 @@ public class XBeePacketDecoder extends MessageToMessageDecoder<XBeePacket> {
                 XBeeReceive.Options options = new XBeeReceive.Options(data.readByte());
                 byte appData[] = new byte[data.readableBytes()];
                 data.readBytes(appData);
-                return new XBeeReceive64(source, rssi, options, appData);
+                out.add(new XBeeReceive64(source, rssi, options, appData));
             }
             case ZB_RX_PACKET: {
                 byte frameID = data.readByte();
@@ -66,12 +68,12 @@ public class XBeePacketDecoder extends MessageToMessageDecoder<XBeePacket> {
                 XBeeReceive.Options options = new XBeeReceive.Options(data.readByte());
                 byte appData[] = new byte[data.readableBytes()];
                 data.readBytes(appData);
-                return new ZigBeeReceive(frameID, source64, source16, options, appData);
+                out.add(new ZigBeeReceive(frameID, source64, source16, options, appData));
             }
             case TX_STATUS: {
                 byte frameID = data.readByte();
                 byte status = data.readByte();
-                return new XBeeTransmitStatus(frameID, status);
+                out.add(new XBeeTransmitStatus(frameID, status));
             }
             case AT_COMMAND_RESPONSE: {
                 byte frameID = data.readByte();
@@ -79,11 +81,10 @@ public class XBeePacketDecoder extends MessageToMessageDecoder<XBeePacket> {
                 XBeeAtCommandResponse.Status status = XBeeAtCommandResponse.Status.fromValue(data.readByte());
                 byte valueData[] = new byte[data.readableBytes()];
                 data.readBytes(valueData);
-                return new XBeeAtCommandResponse(frameID, command, status, valueData);
+                out.add(new XBeeAtCommandResponse(frameID, command, status, valueData));
             }
             default:
                 LOGGER.error(String.format("Unknown API identifier 0x%x", packet.getApiIdentifier()));
-                return null;
         }
     }
 

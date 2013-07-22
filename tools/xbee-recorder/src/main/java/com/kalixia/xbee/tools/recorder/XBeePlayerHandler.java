@@ -1,7 +1,6 @@
 package com.kalixia.xbee.tools.recorder;
 
-import io.netty.channel.ChannelHandlerContext;
-import io.netty.channel.ChannelOutboundMessageHandlerAdapter;
+import io.netty.channel.ChannelOutboundHandlerAdapter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -11,7 +10,7 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.util.concurrent.atomic.AtomicLong;
 
-public class XBeePlayerHandler extends ChannelOutboundMessageHandlerAdapter<Object> {
+public class XBeePlayerHandler extends ChannelOutboundHandlerAdapter {
     private final FileInputStream fis;
     private final ObjectInputStream ois;
     private final AtomicLong counter = new AtomicLong();
@@ -22,10 +21,10 @@ public class XBeePlayerHandler extends ChannelOutboundMessageHandlerAdapter<Obje
         ois = new ObjectInputStream(fis);
     }
 
-    @Override
-    protected void flush(ChannelHandlerContext ctx, Object msg) throws Exception {
+//    @Override
+//    protected void flush(ChannelHandlerContext ctx, Object msg) throws Exception {
         // do nothing
-    }
+//    }
 
 //    public void writeRequested(ChannelHandlerContext ctx, Object obj) throws Exception {
 //        super.writeRequested(ctx, obj);

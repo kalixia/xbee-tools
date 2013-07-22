@@ -14,7 +14,6 @@ import io.netty.channel.oio.OioEventLoopGroup;
 import io.netty.channel.rxtx.RxtxChannel;
 import io.netty.channel.rxtx.RxtxChannelOption;
 import io.netty.channel.rxtx.RxtxDeviceAddress;
-import io.netty.handler.logging.ByteLoggingHandler;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -46,8 +45,6 @@ public class XBeeModemInfo {
                         public void initChannel(RxtxChannel ch) throws Exception {
                             ChannelPipeline pipeline = ch.pipeline();
 
-                            pipeline.addLast(new ByteLoggingHandler());
-
                             pipeline.addLast("xbee-request-encoder", new XBeeRequestEncoder());
                             pipeline.addLast("xbee-frame-decoder", new XBeeFrameDelimiterDecoder());
                             pipeline.addLast("xbee-packet-decoder", new XBeePacketDecoder(1));
@@ -61,7 +58,7 @@ public class XBeeModemInfo {
             Channel channel = f.channel();
             channel.closeFuture().sync();
         } finally {
-            b.shutdown();
+            b.group().shutdownGracefully();
         }
     }
 

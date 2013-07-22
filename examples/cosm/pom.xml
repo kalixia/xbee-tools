@@ -6,7 +6,7 @@
     <parent>
         <groupId>com.kalixia.xbee</groupId>
         <artifactId>xbee-examples</artifactId>
-        <version>0.1</version>
+        <version>0.2</version>
     </parent>
     <artifactId>cosm</artifactId>
     <name>Examples :: COSM/Pachube</name>

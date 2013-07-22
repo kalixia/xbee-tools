@@ -5,7 +5,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.kalixia.xbee</groupId>
     <artifactId>xbee-tools-parent</artifactId>
-    <version>0.1</version>
+    <version>0.2</version>
     <packaging>pom</packaging>
     <name>XBee/ZigBee Tools</name>
     <description>XBee/ZigBee Java API and tools based on Netty.</description>
@@ -182,7 +182,7 @@
     </build>
 
     <properties>
-        <netty.version>4.0.0.Beta2</netty.version>
+        <netty.version>4.0.3.Final</netty.version>
     </properties>
     
 </project>

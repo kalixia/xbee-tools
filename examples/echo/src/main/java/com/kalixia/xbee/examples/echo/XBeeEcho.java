@@ -50,7 +50,7 @@ public class XBeeEcho {
             ChannelFuture f = b.connect().sync();
             f.channel().closeFuture().sync();
         } finally {
-            b.shutdown();
+            b.group().shutdown();
         }
     }
 

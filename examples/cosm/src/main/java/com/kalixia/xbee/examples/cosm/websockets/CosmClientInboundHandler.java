@@ -3,35 +3,33 @@ package com.kalixia.xbee.examples.cosm.websockets;
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelFuture;
 import io.netty.channel.ChannelHandlerContext;
-import io.netty.channel.ChannelInboundMessageHandlerAdapter;
-import io.netty.channel.ChannelPromise;
+import io.netty.channel.ChannelInboundHandlerAdapter;
 import io.netty.handler.codec.http.FullHttpResponse;
 import io.netty.handler.codec.http.websocketx.CloseWebSocketFrame;
 import io.netty.handler.codec.http.websocketx.PongWebSocketFrame;
 import io.netty.handler.codec.http.websocketx.TextWebSocketFrame;
 import io.netty.handler.codec.http.websocketx.WebSocketClientHandshaker;
 import io.netty.handler.codec.http.websocketx.WebSocketFrame;
-import io.netty.util.CharsetUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-class CosmClientInboundHandler extends ChannelInboundMessageHandlerAdapter<Object> {
+class CosmClientInboundHandler extends ChannelInboundHandlerAdapter {
     private final WebSocketClientHandshaker handshaker;
-    private ChannelPromise handshakeFuture;
+//    private ChannelPromise handshakeFuture;
     private static final Logger LOGGER = LoggerFactory.getLogger(CosmClientInboundHandler.class);
 
     public CosmClientInboundHandler(WebSocketClientHandshaker handshaker) {
         this.handshaker = handshaker;
     }
 
-    public ChannelFuture handshakeFuture() {
-        return handshakeFuture;
-    }
+//    public ChannelFuture handshakeFuture() {
+//        return handshakeFuture;
+//    }
 
-    @Override
-    public void beforeAdd(ChannelHandlerContext ctx) throws Exception {
-        handshakeFuture = ctx.newPromise();
-    }
+//    @Override
+//    public void beforeAdd(ChannelHandlerContext ctx) throws Exception {
+//        handshakeFuture = ctx.newPromise();
+//    }
 
     @Override
     public void channelActive(ChannelHandlerContext ctx) throws Exception {
@@ -44,19 +42,18 @@ class CosmClientInboundHandler extends ChannelInboundMessageHandlerAdapter<Objec
     }
 
     @Override
-    protected void messageReceived(ChannelHandlerContext ctx, Object msg) throws Exception {
+    public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception {
         Channel ch = ctx.channel();
         if (!handshaker.isHandshakeComplete()) {
             handshaker.finishHandshake(ch, (FullHttpResponse) msg);
             LOGGER.info("COSM Client connected!");
-            handshakeFuture.setSuccess();
+//            handshakeFuture.setSuccess();
             return;
         }
 
         if (msg instanceof FullHttpResponse) {
             FullHttpResponse response = (FullHttpResponse) msg;
-            throw new Exception("Unexpected FullHttpResponse (status=" + response.getStatus() + ", content="
-                    + response.data().toString(CharsetUtil.UTF_8) + ')');
+            throw new Exception("Unexpected FullHttpResponse (status=" + response.getStatus() + ')');
         }
 
         WebSocketFrame frame = (WebSocketFrame) msg;
@@ -74,11 +71,6 @@ class CosmClientInboundHandler extends ChannelInboundMessageHandlerAdapter<Objec
     @Override
     public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) throws Exception {
         cause.printStackTrace();
-
-        if (!handshakeFuture.isDone()) {
-            handshakeFuture.setFailure(cause);
-        }
-
         ctx.close();
     }
 }

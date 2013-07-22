@@ -51,7 +51,7 @@ class XBeeImpl implements XBee {
                 }
             });
         } finally {
-            rxtxBootstrap.shutdown();
+            rxtxBootstrap.group().shutdownGracefully();
         }
     }
 

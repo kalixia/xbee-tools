@@ -3,7 +3,7 @@ package com.kalixia.xbee.tools.recorder;
 import com.kalixia.xbee.api.xbee.XBeeReceive;
 import com.kalixia.xbee.utils.HexUtils;
 import io.netty.channel.ChannelHandlerContext;
-import io.netty.channel.ChannelInboundMessageHandlerAdapter;
+import io.netty.channel.ChannelInboundHandlerAdapter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -13,7 +13,7 @@ import java.io.IOException;
 import java.io.ObjectOutputStream;
 import java.util.concurrent.atomic.AtomicLong;
 
-public class XBeeRecorderHandler extends ChannelInboundMessageHandlerAdapter<XBeeReceive> {
+public class XBeeRecorderHandler extends ChannelInboundHandlerAdapter {
     private final Format format;
     private final FileOutputStream fos;
     private final ObjectOutputStream oos;
@@ -27,7 +27,8 @@ public class XBeeRecorderHandler extends ChannelInboundMessageHandlerAdapter<XBe
     }
 
     @Override
-    protected void messageReceived(ChannelHandlerContext ctx, XBeeReceive request) throws Exception {
+    public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception {
+        XBeeReceive request = (XBeeReceive) msg;
         oos.writeObject(request);
         oos.flush();
         long count = counter.incrementAndGet();

@@ -60,8 +60,8 @@ public class XBeeCosmGatewayWS implements XBeeCosmGateway {
             // configure the RXTX client
             bootstrapRxtx(cosmChannel).closeFuture().sync();
         } finally {
-            rxtxBootstrap.shutdown();
-            cosmBootstrap.shutdown();
+            rxtxBootstrap.group().shutdownGracefully();
+            cosmBootstrap.group().shutdownGracefully();
         }
     }
 
@@ -78,7 +78,7 @@ public class XBeeCosmGatewayWS implements XBeeCosmGateway {
                 .handler(new CosmChannelInitializer());
         LOGGER.info("COSM client connecting...");
         Channel ch = cosmBootstrap.connect().sync().channel();
-        cosmClientInboundHandler.handshakeFuture().sync();
+//        cosmClientInboundHandler.handshakeFuture().sync();
 
         return ch;
     }

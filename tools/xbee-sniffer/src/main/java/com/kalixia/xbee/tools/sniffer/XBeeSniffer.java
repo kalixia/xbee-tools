@@ -50,7 +50,7 @@ public class XBeeSniffer {
             f.channel().closeFuture().sync();
             LOGGER.info("Listening for serial data on {} at {} bauds...", serialPorts.get(0), baudRate);
         } finally {
-            b.shutdown();
+            b.group().shutdownGracefully();
         }
 
 //        if (!channel.isConnected()) {

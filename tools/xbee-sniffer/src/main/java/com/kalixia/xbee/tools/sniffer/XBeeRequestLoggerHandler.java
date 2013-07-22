@@ -3,11 +3,11 @@ package com.kalixia.xbee.tools.sniffer;
 import com.kalixia.xbee.api.xbee.XBeeRequest;
 import com.kalixia.xbee.utils.HexUtils;
 import io.netty.channel.ChannelHandlerContext;
-import io.netty.channel.ChannelInboundMessageHandlerAdapter;
+import io.netty.channel.ChannelInboundHandlerAdapter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class XBeeRequestLoggerHandler extends ChannelInboundMessageHandlerAdapter<XBeeRequest> {
+public class XBeeRequestLoggerHandler extends ChannelInboundHandlerAdapter {
     private boolean hexDump;
     private static final Logger LOGGER = LoggerFactory.getLogger(XBeeRequestLoggerHandler.class);
 
@@ -18,7 +18,8 @@ public class XBeeRequestLoggerHandler extends ChannelInboundMessageHandlerAdapte
     }
 
     @Override
-    public void messageReceived(ChannelHandlerContext ctx, XBeeRequest request) throws Exception {
+    public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception {
+        XBeeRequest request = (XBeeRequest) msg;
         if (hexDump)
             LOGGER.info("Received XBee packet {}", HexUtils.toHexStringPrefixed(request.getData()));
         else

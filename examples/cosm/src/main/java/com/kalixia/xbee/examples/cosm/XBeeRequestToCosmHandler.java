@@ -1,14 +1,13 @@
 package com.kalixia.xbee.examples.cosm;
 
 import com.kalixia.xbee.api.xbee.XBeeReceive;
-import com.kalixia.xbee.api.xbee.XBeeRequest;
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelHandlerContext;
-import io.netty.channel.ChannelInboundMessageHandlerAdapter;
+import io.netty.channel.ChannelInboundHandlerAdapter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class XBeeRequestToCosmHandler extends ChannelInboundMessageHandlerAdapter<XBeeRequest> {
+public class XBeeRequestToCosmHandler extends ChannelInboundHandlerAdapter {
     private final Channel cosmChannel;
     private final String apiKey;
     private final Long feedID;
@@ -23,7 +22,7 @@ public class XBeeRequestToCosmHandler extends ChannelInboundMessageHandlerAdapte
     }
 
     @Override
-    protected void messageReceived(ChannelHandlerContext ctx, XBeeRequest msg) throws Exception {
+    public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception {
         if (msg instanceof XBeeReceive) {
             XBeeReceive received = (XBeeReceive) msg;
             LOGGER.debug("Received message from {} with RSSI {} and data {}",

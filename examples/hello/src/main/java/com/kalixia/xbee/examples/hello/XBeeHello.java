@@ -14,7 +14,6 @@ import io.netty.channel.rxtx.RxtxChannelOption;
 import io.netty.channel.rxtx.RxtxDeviceAddress;
 import io.netty.handler.codec.LineBasedFrameDecoder;
 import io.netty.handler.codec.string.StringDecoder;
-import io.netty.handler.logging.ByteLoggingHandler;
 import io.netty.handler.logging.LogLevel;
 import io.netty.util.CharsetUtil;
 import org.slf4j.Logger;
@@ -49,7 +48,6 @@ public class XBeeHello {
                         @Override
                         public void initChannel(RxtxChannel ch) throws Exception {
                             ChannelPipeline pipeline = ch.pipeline();
-                            pipeline.addLast(new ByteLoggingHandler(LogLevel.INFO));
 
                             pipeline.addLast("xbee-request-encoder", new XBeeRequestEncoder());
 
@@ -76,7 +74,7 @@ public class XBeeHello {
 
             channel.closeFuture().sync();
         } finally {
-            b.shutdown();
+            b.group().shutdownGracefully();
         }
     }
 

@@ -53,8 +53,8 @@ public class XBeeCosmGatewayHttp implements XBeeCosmGateway {
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
-            rxtxBootstrap.shutdown();
-            cosmBootstrap.shutdown();
+            rxtxBootstrap.group().shutdownGracefully();
+            cosmBootstrap.group().shutdownGracefully();
         }
     }
 

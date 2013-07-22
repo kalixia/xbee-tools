@@ -1,12 +1,14 @@
 package com.kalixia.xbee.handler.codec.xbee;
 
-import io.netty.buffer.BufUtil;
 import io.netty.buffer.ByteBuf;
+import io.netty.buffer.ByteBufUtil;
 import io.netty.buffer.Unpooled;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.handler.codec.ByteToMessageDecoder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.util.List;
 
 /**
  * Decoder which analyzes serial data input and generate appropriate frames as {@link XBeePacket}s.
@@ -17,9 +19,9 @@ public class XBeeFrameDelimiterDecoder extends ByteToMessageDecoder {
     private static final Logger LOGGER = LoggerFactory.getLogger(XBeeFrameDelimiterDecoder.class);
 
     @Override
-    protected Object decode(ChannelHandlerContext ctx, ByteBuf in) throws Exception {
+    protected void decode(ChannelHandlerContext ctx, ByteBuf in, List<Object> out) throws Exception {
         if (in.readableBytes() < 1 + 2) {  // 1 byte for start delimiter + 2 bytes for packet length
-            return null;
+            return;
         }
 
         in.markReaderIndex();
@@ -31,14 +33,14 @@ public class XBeeFrameDelimiterDecoder extends ByteToMessageDecoder {
             LOGGER.error("Oops, received {} instead of {}. Skipping byte...",
                     Integer.toHexString(start), Integer.toHexString(START_DELIMITER));
 //            throw new IllegalStateException("Invalid start delimiter");
-            return null;
+            return;
         }
 
         // read the packet length
         short length = in.readShort();
         if (length < 2) {
             LOGGER.error("XBee Packet is too short: {} bytes!", length);
-            return null;
+            return;
         }
 
         // make sure if there's enough bytes in the buffer.
@@ -49,7 +51,7 @@ public class XBeeFrameDelimiterDecoder extends ByteToMessageDecoder {
             // Reset to the marked position to read the length field again next time.
             in.resetReaderIndex();
 
-            return null;
+            return;
         }
 
         // figure out XBee API identifier
@@ -68,7 +70,7 @@ public class XBeeFrameDelimiterDecoder extends ByteToMessageDecoder {
             LOGGER.debug("Frame size is {}. API Identifier is: {}. Checksum is: {}", new Object[]{
                     length,
                     packet.getApiIdentifier().name(),
-                    "0x" + BufUtil.hexDump(Unpooled.wrappedBuffer(new byte[]{packet.getChecksum()}))
+                    "0x" + ByteBufUtil.hexDump(Unpooled.wrappedBuffer(new byte[]{packet.getChecksum()}))
             });
             LOGGER.debug("Frame content is: {}", packet.getData());
         }
@@ -78,7 +80,7 @@ public class XBeeFrameDelimiterDecoder extends ByteToMessageDecoder {
 
 
         // Successfully decoded a frame.  Return the decoded frame.
-        return packet;
+        out.add(packet);
     }
 
     @Override

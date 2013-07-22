@@ -5,8 +5,8 @@
     <modelVersion>4.0.0</modelVersion>
     <parent>
         <groupId>com.kalixia.xbee</groupId>
-        <artifactId>xbee-tools</artifactId>
-        <version>0.1</version>
+        <artifactId>xbee-examples</artifactId>
+        <version>0.2</version>
     </parent>
     <groupId>com.kalixia.xbee.examples</groupId>
     <artifactId>hello</artifactId>
